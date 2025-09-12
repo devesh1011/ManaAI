@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation, Link } from 'react-router-dom';
 import { Box, NavLink, Text, Button, ThemeIcon, Loader, useMantineTheme, ActionIcon } from '@mantine/core';
 import {
@@ -12,45 +12,16 @@ import {
   IconCircleDashed,
   IconSchool,
 } from '@tabler/icons-react';
-import { courseService } from '../api/courseService';
 import { useTranslation } from 'react-i18next';
+import { useCourse } from '../contexts/CourseContext';
 import {MainLink} from "../layouts/AppLayout.jsx";
 import {useMediaQuery} from "@mantine/hooks";
 
-const ChapterLink = ({ chapter, activeChapter, index, handleChapterClick, handleNavigation, chapterId, courseId, opened, currentTab, isExpanded, ...props }) => {
-  const [hasQuestions, setHasQuestions] = useState(false);
-  const intervalRef = useRef(null);
+const ChapterLink = ({ chapter, index, handleChapterClick, handleNavigation, chapterId, opened, currentTab, isExpanded }) => {
   const theme = useMantineTheme();
 
-  useEffect(() => {
-    // If this chapter already has a quiz, don't poll.
-    if (hasQuestions) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      return;
-    }
-
-    // Poll for quiz questions for this specific chapter
-    intervalRef.current = setInterval(async () => {
-      try {
-        // Use chapter.id from the mapped chapter, not the active chapterId from params
-        const questions = await courseService.getChapterQuestions(courseId, chapter.id);
-        if (questions && questions.length > 0) {
-          setHasQuestions(true);
-          clearInterval(intervalRef.current);
-        }
-      } catch (error) {
-        console.error(`Error polling for quiz in chapter ${chapter.id}:`, error);
-        clearInterval(intervalRef.current);
-      }
-    }, 500); // Poll every 500ms
-
-    // Cleanup function for when the component unmounts or dependencies change
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [courseId, chapter.id, hasQuestions]); // Dependencies for the effect
+  // Check if chapter has quiz questions (updated in real-time via WebSocket)
+  const hasQuestions = chapter.quiz_questions && chapter.quiz_questions.length > 0;
 
   // When collapsed, render as a simple numbered button
   if (!opened) {
@@ -160,10 +131,8 @@ const CourseSidebar = ({opened, setopen}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { courseId, chapterId } = useParams();
+  const { course, chapters, loading } = useCourse();
 
-  const [course, setCourse] = useState(null);
-  const [chapters, setChapters] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [expandedChapters, setExpandedChapters] = useState(new Set());
   const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -171,16 +140,13 @@ const CourseSidebar = ({opened, setopen}) => {
   const searchParams = new URLSearchParams(location.search);
   const currentTab = searchParams.get('tab') || 'content';
 
-  // Refs to hold interval IDs for cleanup
-  const coursePollInterval = useRef(null);
-
   // Update activeChapter when chapterId changes
   useEffect(() => {
     // Ensure the active chapter is always expanded
     if (chapterId && !expandedChapters.has(chapterId)) {
       setExpandedChapters(prev => new Set([...prev, chapterId]));
     }
-  }, [chapterId]);
+  }, [chapterId, expandedChapters]);
 
   // Toggle chapter expansion
   const toggleChapter = (chapterId) => {
@@ -194,82 +160,6 @@ const CourseSidebar = ({opened, setopen}) => {
       return newSet;
     });
   };
-
-  // --- Polling and Data Fetching Logic ---
-
-  // Fetches initial course and chapter data
-  const fetchInitialData = async () => {
-    if (!courseId) return;
-    try {
-      setLoading(true);
-      const [courseData, chaptersData] = await Promise.all([
-        courseService.getCourseById(courseId),
-        courseService.getCourseChapters(courseId),
-      ]);
-
-      setCourse(courseData);
-      // Initialize chapters with has_questions as false. It will be updated by polling.
-      const initialChapters = (chaptersData || []).map(ch => ({ ...ch, has_questions: false }));
-      setChapters(initialChapters);
-
-      // If the course is being created, start polling for updates
-      if (courseData?.status === 'CourseStatus.CREATING') {
-        startCoursePolling();
-      }
-    } catch (error) {
-      console.error('Failed to fetch initial course data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Polls for course status and new chapters
-  const startCoursePolling = () => {
-    if (coursePollInterval.current) clearInterval(coursePollInterval.current);
-
-    coursePollInterval.current = setInterval(async () => {
-      try {
-        const [updatedCourse, updatedChaptersData] = await Promise.all([
-          courseService.getCourseById(courseId),
-          courseService.getCourseChapters(courseId),
-        ]);
-
-        setCourse(updatedCourse);
-
-        // Check for newly added chapters
-        setChapters(prevChapters => {
-          const newChapters = (updatedChaptersData || []).map(newChap => {
-            const existing = prevChapters.find(p => p.id === newChap.id);
-            return existing ? existing : { ...newChap, has_questions: false };
-          });
-
-          return newChapters;
-        });
-
-        // If course creation is finished, stop polling
-        if (updatedCourse?.status === 'CourseStatus.FINISHED') {
-          clearInterval(coursePollInterval.current);
-        }
-      } catch (error) {
-        console.error('Error during course polling:', error);
-        clearInterval(coursePollInterval.current); // Stop on error
-      }
-    }, 2000); // Poll every 2 seconds
-  };
-
-  // --- Effects ---
-
-  // Initial data load
-  useEffect(() => {
-    fetchInitialData();
-
-    // Cleanup function to clear all intervals when the component unmounts
-    return () => {
-      if (coursePollInterval.current) {
-        clearInterval(coursePollInterval.current);
-      }
-    };
-  }, [courseId]);
 
   // --- Handlers ---
 
@@ -360,7 +250,6 @@ const CourseSidebar = ({opened, setopen}) => {
             handleChapterClick={handleChapterClick}
             handleNavigation={handleNavigation}
             chapterId={chapterId}
-            courseId={courseId}
             opened={opened}
             currentTab={currentTab}
             isExpanded={expandedChapters.has(chapter.id.toString())}
