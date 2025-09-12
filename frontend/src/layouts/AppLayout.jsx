@@ -59,7 +59,6 @@ import TrackActivity from "../components/TrackActivity";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import CourseSidebar from "../components/CourseSidebar"; // Import the new component
-import { courseService } from "../api/courseService"; // To fetch course data
 
 // MainLink component for sidebar navigation
 export const MainLink = ({
@@ -193,37 +192,11 @@ function AppLayout() {
   const bottomTextSize = Math.max(10, Math.round(12 * scale));
   const bottomPadding = Math.max(6, Math.round(6 * scale));
 
-  const [course, setCourse] = useState(null);
-  const [chapters, setChapters] = useState([]);
-
   // Check if the current route is a course or chapter view
   const courseViewMatch = location.pathname.match(
     /\/dashboard\/courses\/(\d+)/
   );
   const isCoursePage = !!courseViewMatch;
-  const courseId = courseViewMatch ? courseViewMatch[1] : null;
-
-  useEffect(() => {
-    if (isCoursePage && courseId) {
-      const fetchCourseData = async () => {
-        try {
-          const [courseData, chaptersData] = await Promise.all([
-            courseService.getCourseById(courseId),
-            courseService.getCourseChapters(courseId),
-          ]);
-          setCourse(courseData);
-          setChapters(chaptersData || []);
-        } catch (error) {
-          console.error("Failed to fetch course data for sidebar:", error);
-        }
-      };
-      fetchCourseData();
-    } else {
-      // Clear course data when not on a course page
-      setCourse(null);
-      setChapters([]);
-    }
-  }, [isCoursePage, courseId]);
 
   // Toggle navbar visibility
   const toggleNavbar = () => setOpened((o) => !o);

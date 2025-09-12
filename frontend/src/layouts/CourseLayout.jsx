@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Outlet, useParams, NavLink, useNavigate } from 'react-router-dom';
 import {
   AppShell,
@@ -17,7 +17,6 @@ import {
   Stack,
   ActionIcon,
   Loader,
-  Alert,
   Flex
 } from '@mantine/core';
 import {
@@ -33,14 +32,13 @@ import {
   IconQuestionMark,
   IconCheck,
   IconHome2,
-  IconAlertCircle,
   IconList,
   IconX,
   IconCards
 } from '@tabler/icons-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
-import courseService from '../api/courseService';
+import { useCourse } from '../contexts/CourseContext';
 
 
 function CourseLayout() {
@@ -51,34 +49,11 @@ function CourseLayout() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { t } = useTranslation(['navigation', 'app', 'settings']);
   const dark = colorScheme === 'dark';
+  const { chapters, loading } = useCourse();
 
   // Sidebar is closed by default
 
   const [sidebarOpened, setSidebarOpened] = useState(false);
-
-  // ----- Fetch chapters -------------------------------------------------- //
-  const [chapters, setChapters] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchChapters = async () => {
-      if (!courseId) return;
-      try {
-        setLoading(true);
-        const chaptersData = await courseService.getCourseChapters(courseId);
-        setChapters(chaptersData);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch chapters:', err);
-        setError('Failed to load course chapters.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchChapters();
-  }, [courseId]);
 
   // ----- Handlers -------------------------------------------------------- //
   const handleLogout = () => {
@@ -185,12 +160,7 @@ function CourseLayout() {
         {/* Body */}
         <Box sx={{ flex: 1, overflowY: 'auto' }}>
           {loading && <Loader />}    
-          {error && (
-            <Alert icon={<IconAlertCircle size={16} />} color="red">
-              {error}
-            </Alert>
-          )}
-          {!loading && !error && <Stack spacing="md">{chapterNavLinks}</Stack>}
+          {!loading && <Stack spacing="md">{chapterNavLinks}</Stack>}
         </Box>
 
         {/* User menu */}
