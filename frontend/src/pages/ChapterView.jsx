@@ -23,6 +23,7 @@ import { MediaGallery } from '../components/media/MediaGallery';
 import { FileList } from '../components/media/FileList';
 import { toast } from 'react-toastify';
 import { courseService } from '../api/courseService';
+import { useCourse } from '../contexts/CourseContext';
 import ToolbarContainer from '../components/tools/ToolbarContainer';
 import { useToolbar } from '../contexts/ToolbarContext';
 import AiCodeWrapper from "../components/AiCodeWrapper.jsx";
@@ -37,6 +38,7 @@ function ChapterView() {
   const navigate = useNavigate();
   const location = useLocation(); // Get location to read query params
   const { toolbarOpen, toolbarWidth } = useToolbar();
+  const { chapters } = useCourse();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Read tab from URL, default to 'content'
@@ -54,14 +56,12 @@ function ChapterView() {
   const [downloadingPDF, setDownloadingPDF] = useState(false);
   const [deletingItem, setDeletingItem] = useState(null);
   const [hasQuestions, setHasQuestions] = useState(false);
-  const [questionsCreated, setQuestionsCreated] = useState(false); // Start as false
   const [questionCount, setQuestionCount] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false); // New state for blinking
   const [quizKey, setQuizKey] = useState(0); // Force Quiz component re-mount
 
   // Refs for cleanup
   const contentRef = useRef(null);
-  const pollIntervalRef = useRef(null);
   const blinkTimeoutRef = useRef(null);
 
   // Listen for URL parameter changes and update active tab
@@ -103,11 +103,9 @@ function ChapterView() {
         if (questionsData && questionsData.length > 0) {
           setHasQuestions(true);
           setQuestionCount(questionsData.length);
-          setQuestionsCreated(true); // Questions already exist
         } else {
           setHasQuestions(false);
           setQuestionCount(0);
-          setQuestionsCreated(false); // No questions yet, start polling
         }
 
         // Set initial media state with empty URLs (will be populated in next effect)
@@ -213,63 +211,32 @@ function ChapterView() {
     fetchMedia();
   }, [images, files, loading, t]);
 
-  // Polling logic for quiz questions - FIXED
+  // Update local state based on real-time chapter data
   useEffect(() => {
-    // Only start polling if questions haven't been created yet
-    if (questionsCreated || loading) {
-      return;
+    const currentChapter = chapters.find(ch => ch.id.toString() === chapterId);
+    const chapterQuizQuestions = currentChapter?.quiz_questions || [];
+
+    if (chapterQuizQuestions.length > 0) {
+      setHasQuestions(true);
+      setQuestionCount(chapterQuizQuestions.length);
+
+      // Force Quiz component to re-mount and fetch new data
+      setQuizKey(prev => prev + 1);
+
+      // Start blinking animation if questions were just created
+      if (!hasQuestions) {
+        setIsBlinking(true);
+        blinkTimeoutRef.current = setTimeout(() => {
+          setIsBlinking(false);
+        }, 4000);
+
+        toast.success(t("quizReady"));
+      }
+    } else {
+      setHasQuestions(false);
+      setQuestionCount(0);
     }
-
-    console.log('Starting polling for quiz questions...');
-
-    const pollForQuestions = async () => {
-      try {
-        const questionsData = await courseService.getChapterQuestions(courseId, chapterId);
-
-        if (questionsData && questionsData.length > 0) {
-          console.log('Questions found! Stopping polling.');
-
-          // Clear the polling interval
-          if (pollIntervalRef.current) {
-            clearInterval(pollIntervalRef.current);
-            pollIntervalRef.current = null;
-          }
-
-          // Update state
-          setHasQuestions(true);
-          setQuestionCount(questionsData.length);
-          setQuestionsCreated(true);
-          toast.success(t("quizReady"))
-
-
-          // Force Quiz component to re-mount and fetch new data
-          setQuizKey(prev => prev + 1);
-
-          // Start blinking animation
-          setIsBlinking(true);
-
-          // Stop blinking after 4 seconds
-          blinkTimeoutRef.current = setTimeout(() => {
-            setIsBlinking(false);
-          }, 4000);
-        }
-      } catch (error) {
-        console.error('Error polling for questions:', error);
-        // Don't show error toast for polling failures, as this is expected during creation
-      }
-    };
-
-    // Start polling every 500ms
-    pollIntervalRef.current = setInterval(pollForQuestions, 500);
-
-    // Cleanup function
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-        pollIntervalRef.current = null;
-      }
-    };
-  }, [courseId, chapterId, questionsCreated, loading, t]);
+  }, [chapters, chapterId, hasQuestions, t]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -287,9 +254,6 @@ function ChapterView() {
       });
 
       // Cleanup intervals and timeouts
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
-      }
       if (blinkTimeoutRef.current) {
         clearTimeout(blinkTimeoutRef.current);
       }

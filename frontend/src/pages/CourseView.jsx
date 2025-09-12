@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useCourse } from '../contexts/CourseContext';
 
 import {
   Container,
@@ -39,17 +40,19 @@ import {
   IconX,
   IconPlayerPlay,
 } from '@tabler/icons-react';
-import { courseService } from '../api/courseService';
 
 function CourseView() {
   const { t } = useTranslation('courseView');
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const { course, chapters, loading, error, clearError, fetchCourseData } = useCourse();
 
-  const [course, setCourse] = useState(null);
-  const [chapters, setChapters] = useState([]); // ADDED: Dedicated state for chapters
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Fetch course data when courseId changes
+  useEffect(() => {
+    if (courseId) {
+      fetchCourseData(courseId);
+    }
+  }, [courseId, fetchCourseData]);
 
   // NEW: State for first-time video popup
   const [showVideoPopup, setShowVideoPopup] = useState(false);
@@ -63,7 +66,7 @@ function CourseView() {
     estimatedTotal: 0,
   });
 
-  // NEW: Check localStorage on mount
+    // NEW: Check localStorage on mount
   useEffect(() => {
     const hasSeenVideoFlag = localStorage.getItem('hasSeenFirstCourseVideo');
     if (hasSeenVideoFlag === 'true') {
@@ -93,119 +96,39 @@ function CourseView() {
     }
   }, [contentReady, hasSeenVideo, course?.status]);
 
+  // Initialize creationProgressUI when course data is available
+  useEffect(() => {
+    if (course && course.status === 'CourseStatus.CREATING') {
+      const totalChapters = course.chapter_count || 0;
+      const currentChaptersLength = chapters ? chapters.filter(chapter => chapter.id !== null).length : 0;
+      const progressPercent = totalChapters > 0 ? Math.round((currentChaptersLength / totalChapters) * 100) : 0;
+
+      setCreationProgressUI({
+        statusText: t('creation.statusCreatingChapters', {
+          chaptersCreated: currentChaptersLength,
+          totalChapters: totalChapters || t('creation.unknownTotal')
+        }),
+        percentage: progressPercent,
+        chaptersCreated: currentChaptersLength,
+        estimatedTotal: totalChapters,
+      });
+    } else if (course && course.status === 'CourseStatus.FINISHED') {
+      const totalChapters = course.chapter_count || 0;
+      const currentChaptersLength = chapters ? chapters.filter(chapter => chapter.id !== null).length : 0;
+
+      setCreationProgressUI({
+        statusText: t('creation.statusComplete'),
+        percentage: 100,
+        chaptersCreated: currentChaptersLength,
+        estimatedTotal: totalChapters,
+      });
+    }
+  }, [course, chapters, t]);
+
   // NEW: Function to close video popup
   const closeVideoPopup = () => {
     setShowVideoPopup(false);
   };
-
-  // Initial data fetch
-  useEffect(() => {
-    if (!courseId) {
-      setError(t('errors.invalidCourseId'));
-      setLoading(false);
-      return;
-    }
-
-    const fetchInitialCourseData = async () => {
-      try {
-        setLoading(true);
-        console.log('Fetching initial course data for ID:', courseId);
-        const [courseData, currentChaptersData] = await Promise.all([ // CHANGED: Renamed variable for clarity
-          courseService.getCourseById(courseId),
-          courseService.getCourseChapters(courseId)
-        ]);
-        const currentChapters = currentChaptersData || []; // Ensure chapters is an array
-
-        setCourse(courseData);
-        setChapters(currentChapters); // ADDED: Populate the new chapters state
-        setError(null);
-
-        // Initialize creationProgressUI if course is in creating state
-        if (courseData.status === 'CourseStatus.CREATING') {
-          const totalChapters = courseData.chapter_count || 0;
-          const currentChapters_length = currentChapters === null ? 0 : currentChapters.filter(chapter => chapter.id !== null).length;
-          const progressPercent = totalChapters > 0 ? Math.round((currentChapters_length / totalChapters) * 100) : 0;
-
-          setCreationProgressUI({
-            statusText: t('creation.statusCreatingChapters', {
-              chaptersCreated: currentChapters_length,
-              totalChapters: totalChapters || t('creation.unknownTotal')
-            }),
-            percentage: progressPercent,
-            chaptersCreated: currentChapters_length,
-            estimatedTotal: totalChapters,
-          });
-        }
-        console.log('Initial data fetched:', courseData, 'Chapters:', currentChapters);
-      } catch (err) {
-        setError(t('errors.loadFailed'));
-        console.error('Error fetching initial course:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInitialCourseData();
-  }, [courseId, t]);
-
-  // Polling effect for course creation
-  useEffect(() => {
-    // Only poll if course exists and is in CREATING status
-    if (!courseId || !course || course.status !== 'CourseStatus.CREATING') {
-      return;
-    }
-
-    console.log('Starting polling for course ID:', courseId, 'current status:', course.status);
-    const pollInterval = setInterval(async () => {
-      try {
-        const [polledData, polledChaptersData] = await Promise.all([ // CHANGED: Renamed variable
-          courseService.getCourseById(courseId),
-          courseService.getCourseChapters(courseId)
-        ]);
-        const currentChapters = polledChaptersData || [];
-
-        console.log('Polled course data:', polledData, 'Polled chapters:', currentChapters);
-        setCourse(polledData);         // Update the main course state
-        setChapters(currentChapters);  // ADDED: Update the chapters state on each poll
-
-        const totalChapters = polledData.chapter_count || 0;
-
-        const currentChapters_length = currentChapters === null ? 0 : currentChapters.filter(chapter => chapter.id !== null).length;
-        const progressPercent = totalChapters > 0 ? Math.round((currentChapters_length / totalChapters) * 100) : 0;
-
-        if (polledData.status === 'CourseStatus.FINISHED') {
-          setCreationProgressUI({
-            statusText: t('creation.statusComplete'),
-            percentage: 100,
-            chaptersCreated: currentChapters_length,
-            estimatedTotal: totalChapters,
-          });
-          console.log('Course creation completed. Stopping poll.');
-          clearInterval(pollInterval);
-        } else if (polledData.status === 'CourseStatus.CREATING') {
-          setCreationProgressUI({
-            statusText: t('creation.statusCreatingChapters', {
-                chaptersCreated: currentChapters_length,
-                totalChapters: totalChapters || t('creation.unknownTotal')
-            }),
-            percentage: progressPercent,
-            chaptersCreated: currentChapters_length,
-            estimatedTotal: totalChapters,
-          });
-        } else {
-          console.log('Course status changed to:', polledData.status, '. Stopping poll.');
-          clearInterval(pollInterval);
-        }
-      } catch (err) {
-        console.error('Error polling course data:', err);
-      }
-    }, 2000);
-
-    return () => {
-      console.log('Cleaning up poll interval for course ID:', courseId);
-      clearInterval(pollInterval);
-    };
-  }, [course, courseId, t]); // The 'chapters' state is not needed here as it's an outcome, not a trigger for this effect.
 
   // Learning progress calculation
   const { learningPercentage, actualCompletedLearningChapters, totalCourseChaptersForLearning } = useMemo(() => {
@@ -379,7 +302,7 @@ function CourseView() {
          color="orange"
          mb="lg"
          withCloseButton
-         onClose={() => setError(null)}
+         onClose={() => clearError()}
        >
          {error}
        </Alert>
