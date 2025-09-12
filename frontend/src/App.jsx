@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ToolbarProvider } from './contexts/ToolbarContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { PomodoroProvider } from './contexts/PomodoroContext';
+import { CourseProvider } from './contexts/CourseContext';
 
 import './i18n/i18n';
 
@@ -76,8 +77,9 @@ function App() {
             {/*<NotificationProvider>*/}
               <ToolbarProvider>
                 <PomodoroProvider>
-                  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                    <Routes>
+                  <CourseProvider>
+                    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                      <Routes>
                     {/* Public routes with MainLayout */}
                     <Route element={<MainLayout />}>
                       <Route path="/" element={<LandingPage />} /> {/* LandingPage now at root */}
@@ -116,6 +118,7 @@ function App() {
                     <Route path="*" element={<NotFoundPage />} /> {/* Catch-all route for 404 */}
                   </Routes>          
                   </BrowserRouter>
+                  </CourseProvider>
                   <ToastContainer position="top-right" autoClose={3000} theme={colorScheme} />
                 </PomodoroProvider>
               </ToolbarProvider>
