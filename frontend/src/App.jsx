@@ -6,7 +6,6 @@ import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToolbarProvider } from './contexts/ToolbarContext';
 import { LanguageProvider } from './contexts/LanguageContext';
-import { PomodoroProvider } from './contexts/PomodoroContext';
 import { CourseProvider } from './contexts/CourseContext';
 
 import './i18n/i18n';
@@ -18,19 +17,16 @@ import CourseView from './pages/CourseView';
 import ChapterView from './pages/ChapterView';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
 import AppLayout from './layouts/AppLayout';
 import MainLayout from './layouts/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
-import SettingsPage from './pages/SettingsPage';
 import StatisticsPage from './pages/StatisticsPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import Impressum from './pages/Impressum';
 import Privacy from './pages/Privacy';
 import About from './pages/About';
-import PublicCourses from './pages/PublicCourses';
 import MyCourses from './pages/MyCourses';
 import NotFoundPage from './pages/NotFoundPage';
 import AdminView from './pages/AdminView';
@@ -76,13 +72,12 @@ function App() {
           <AuthProvider>
             {/*<NotificationProvider>*/}
               <ToolbarProvider>
-                <PomodoroProvider>
-                  <CourseProvider>
+                <CourseProvider>
                     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                       <Routes>
                     {/* Public routes with MainLayout */}
                     <Route element={<MainLayout />}>
-                      <Route path="/" element={<LandingPage />} /> {/* LandingPage now at root */}
+                      <Route path="/" element={<Navigate to="/dashboard" replace />} /> {/* Redirect root to dashboard */}
                       <Route path="/auth/login" element={<Login />} />
                       <Route path="/auth/signup" element={<Register />} />
                       <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
@@ -95,12 +90,10 @@ function App() {
                     <Route element={<ProtectedRoute />}>
                       <Route path="/dashboard" element={<AppLayout />}> {/* Base path for dashboard and other protected routes */}
                         <Route index element={<Dashboard />} /> {/* This will be /dashboard */}
-                        <Route path="public-courses" element={<PublicCourses />} />
                         <Route path="my-courses" element={<MyCourses />} />
                         <Route path="create-course" element={<CreateCourse />} /> {/* /dashboard/create-course */}
                         <Route path="courses/:courseId" element={<CourseView />} /> {/* /dashboard/courses/:courseId */}
                         <Route path="courses/:courseId/chapters/:chapterId" element={<ChapterView />} /> {/* /dashboard/courses/:courseId/chapters/:chapterId */}
-                        <Route path="settings" element={<SettingsPage />} /> {/* /dashboard/settings */}
                         <Route path="statistics" element={<StatisticsPage />} /> {/* /dashboard/statistics */}
                         <Route path="anki-generator" element={<AnkiGeneratorDashboard />} />
                         <Route path="anki-generator/processing/:taskId" element={<AnkiProcessingStatus />} />
@@ -120,7 +113,6 @@ function App() {
                   </BrowserRouter>
                   </CourseProvider>
                   <ToastContainer position="top-right" autoClose={3000} theme={colorScheme} />
-                </PomodoroProvider>
               </ToolbarProvider>
             {/*</NotificationProvider>*/}
           </AuthProvider>
