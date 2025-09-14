@@ -1,18 +1,5 @@
 # Mana AI
 
-<div align="center">
-  <img src="https://github.com/M4RKUS28/Mana/blob/main/frontend/public/logo_white.png?raw=true" alt="Mana AI Logo" width="200">
-
-#### Your AI Learning Companion
-
-**🌐 Try it live:** [Mana-ai.de](https://Mana-ai.de)
-
-![Dashboard Preview](https://github.com/M4RKUS28/Mana/blob/main/doc/dashboard_white.png?raw=true)
-
-</div>
-
----
-
 ## ✨ What is Mana AI?
 
 Mana AI is not just another learning platform — it's a revolutionary approach to education that harnesses the power of artificial intelligence to create truly personalized learning pathways that evolve with you.
