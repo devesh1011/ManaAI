@@ -11,7 +11,10 @@ from typing import Dict, Any
 
 from google.adk.agents import LlmAgent
 from google.adk.runners import Runner
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
+
 from google.adk.sessions import InMemorySessionService
 
 from ..callbacks import get_url_from_response
@@ -28,17 +31,19 @@ class ImageAgent(StandardAgent):
 
         # Define toolset for unsplash mcp server
         unsplash_mcp_toolset = MCPToolset(
-            connection_params=StdioServerParameters(
-                command="uv",
-                args=[
-                    "run",
-                    "--with",
-                    "fastmcp",
-                    "fastmcp",
-                    "run",
-                    path_to_mcp_server,  # You'll need the actual path to server.py
-                ],
-                env={**os.environ},
+            connection_params=StdioConnectionParams(
+                server_params=StdioServerParameters(
+                    command="uv",
+                    args=[
+                        "run",
+                        "--with",
+                        "fastmcp",
+                        "fastmcp",
+                        "run",
+                        path_to_mcp_server,  # You'll need the actual path to server.py
+                    ],
+                    env={**os.environ},
+                )
             )
         )
 
@@ -66,7 +71,7 @@ async def main():
     print("Starting ImageAgent")
     # Renamed variable for clarity, as 'image_agent' is used inside __init__ for LlmAgent
     image_agent_instance = ImageAgent(
-        app_name="Nexora", session_service=InMemorySessionService()
+        app_name="Mana AI", session_service=InMemorySessionService()
     )
     response = await image_agent_instance.run(
         user_id="test",
