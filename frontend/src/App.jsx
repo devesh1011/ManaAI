@@ -17,16 +17,12 @@ import CourseView from './pages/CourseView';
 import ChapterView from './pages/ChapterView';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import PricingPage from './pages/PricingPage';
 import AppLayout from './layouts/AppLayout';
 import MainLayout from './layouts/MainLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import StatisticsPage from './pages/StatisticsPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
-import Impressum from './pages/Impressum';
-import Privacy from './pages/Privacy';
-import About from './pages/About';
 import MyCourses from './pages/MyCourses';
 import NotFoundPage from './pages/NotFoundPage';
 import AdminView from './pages/AdminView';
@@ -81,10 +77,6 @@ function App() {
                       <Route path="/auth/login" element={<Login />} />
                       <Route path="/auth/signup" element={<Register />} />
                       <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/pricing" element={<PricingPage />} />
-                      <Route path="/impressum" element={<Impressum />} />
-                      <Route path="/privacy" element={<Privacy />} />
                     </Route>
                       {/* Protected routes now based at /dashboard */}
                     <Route element={<ProtectedRoute />}>
