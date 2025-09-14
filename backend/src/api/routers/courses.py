@@ -28,10 +28,7 @@ from ..schemas.course import (
     CourseInfo,
     CourseRequest,
     Chapter as ChapterSchema,
-    UpdateCoursePublicStatusRequest,
 )
-
-from ...config.settings import MAX_COURSE_CREATIONS, MAX_PRESENT_COURSES
 
 
 logger = logging.getLogger(__name__)
@@ -54,37 +51,6 @@ async def create_course_request(
     """
     Initiate course creation as a background task and return a task ID for WebSocket progress updates.
     """
-
-    # Limit not admin account to 10 course creastions
-    if not current_user.is_admin:
-        with get_db_context() as db:
-            created_course_count = usage_crud.get_total_created_courses(
-                db, current_user.id
-            )
-            if created_course_count >= MAX_COURSE_CREATIONS:
-                raise HTTPException(
-                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                    detail={
-                        "error": "LIMIT_REACHED",
-                        "code": "MAX_COURSE_CREATIONS_REACHED",
-                        "limit": MAX_COURSE_CREATIONS,
-                        "message": "You have reached the maximum number of courses you can create.",
-                    },
-                )
-        with get_db_context() as db:
-            current_courses = courses_crud.get_course_count_by_user_id(
-                db, current_user.id
-            )
-            if current_courses >= MAX_PRESENT_COURSES:
-                raise HTTPException(
-                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                    detail={
-                        "error": "LIMIT_REACHED",
-                        "code": "MAX_PRESENT_COURSES_REACHED",
-                        "limit": MAX_PRESENT_COURSES,
-                        "message": "You have reached the maximum number of courses you can have present at the same time.",
-                    },
-                )
 
     with get_db_context() as db:
         # Create empty course in the database
@@ -122,16 +88,6 @@ async def create_course_request(
         )
 
 
-@router.get("/public", response_model=List[CourseInfo])
-async def get_public_courses(
-    db: Session = Depends(get_db), skip: int = 0, limit: int = 100
-):
-    """
-    Get all public courses.
-    """
-    return course_service.get_public_courses(db, skip=skip, limit=limit)
-
-
 @router.get("/", response_model=List[CourseInfo])
 async def get_user_courses(
     current_user: User = Depends(get_current_active_user),
@@ -164,12 +120,15 @@ async def get_course_by_id(
         status=str(course.status),
         title=str(course.title),
         description=str(course.description),
-        chapter_count=int(course.chapter_count) if course.chapter_count else None,
+        chapter_count=(
+            int(course.chapter_count)
+            if course.chapter_count and str(course.status) != "finished"
+            else chapters_crud.get_chapter_count_by_course(db, course.id)
+        ),
         image_url=str(course.image_url) if course.image_url else None,
         completed_chapter_count=course_service.get_completed_chapters_count(
             db, course.id
         ),
-        is_public=course.is_public,
         created_at=course.created_at,
     )
 
@@ -287,41 +246,15 @@ async def update_course_details(
         title=str(updated_course.title),
         description=str(updated_course.description),
         chapter_count=(
-            int(updated_course.chapter_count) if updated_course.chapter_count else None
+            int(updated_course.chapter_count)
+            if updated_course.chapter_count and str(updated_course.status) != "finished"
+            else chapters_crud.get_chapter_count_by_course(db, course_id)
         ),
         image_url=str(updated_course.image_url) if updated_course.image_url else None,
         completed_chapter_count=course_service.get_completed_chapters_count(
             db, course_id
         ),
-        is_public=updated_course.is_public,
     )
-
-
-@router.patch("/{course_id}/public")
-async def update_course_public_status(
-    course_id: int,
-    request: UpdateCoursePublicStatusRequest,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db),
-):
-    """
-    Update the public status of a course.
-    """
-    # Verify course ownership
-    await verify_course_ownership(course_id, str(current_user.id), db)
-
-    # Update the public status
-    updated_course = courses_crud.update_course_public_status(
-        db, course_id, request.is_public
-    )
-
-    if not updated_course:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update course public status",
-        )
-
-    return {"message": f"Course public status updated to {request.is_public}"}
 
 
 @router.delete("/{course_id}")
@@ -517,6 +450,9 @@ async def course_websocket(
             )
             await websocket.close(code=1008)
             return
+
+        # Ensure user_id is a string
+        user_id = str(user_id)
 
         # Verify the user has access to this course
         try:
