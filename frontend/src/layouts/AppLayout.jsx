@@ -833,14 +833,6 @@ function AppLayout() {
                       >
                         {t("theme", { ns: "app" })}
                       </Menu.Item>
-                      <Menu.Item
-                        icon={<IconInfoCircle size={14} />}
-                        onClick={() => {
-                          navigate("/about");
-                        }}
-                      >
-                        {t("about", { ns: "navigation" })}
-                      </Menu.Item>
                       <Divider />
                       <Menu.Item
                         icon={<IconLogout size={14} />}

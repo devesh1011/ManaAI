@@ -255,17 +255,6 @@ function MainLayout() {
                     */}
                     <Divider />
                     <Menu.Item 
-                      icon={<IconInfoCircle size={14} />} 
-                      onClick={() => navigate('/about')}
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: dark ? theme.colors.dark[6] : theme.colors.gray[1],
-                        },
-                      }}
-                    >
-                      {t('about', { ns: 'navigation' })}
-                    </Menu.Item>
-                    <Menu.Item 
                       icon={<IconLogout size={14} />} 
                       onClick={handleLogout}
                       color="red"
