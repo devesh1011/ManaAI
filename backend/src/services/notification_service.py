@@ -125,6 +125,20 @@ class WebSocketConnectionManager:
             course_id,
         )
 
+    async def send_chapter_updated(
+        self, user_id: str, course_id: int, chapter_data: dict
+    ):
+        """Send notification when a chapter is updated."""
+        await self.send_personal_message(
+            {
+                "type": "chapter_updated",
+                "course_id": course_id,
+                "data": chapter_data,
+            },
+            user_id,
+            course_id,
+        )
+
     async def send_course_completed(
         self, user_id: str, course_id: int, course_data: dict
     ):

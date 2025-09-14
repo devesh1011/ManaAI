@@ -345,19 +345,31 @@ class AgentService:
 
                     logger.info("Finished")
 
-                    # Save questions in db
-                    with get_db_context() as db:
-                        await self.save_questions(
-                            db, response_tester["questions"], chapter_db.id
-                        )
+                    # Check if tester agent succeeded
+                    if (
+                        response_tester.get("success") == True
+                        and "questions" in response_tester
+                    ):
+                        # Save questions in db
+                        with get_db_context() as db:
+                            await self.save_questions(
+                                db, response_tester["questions"], chapter_db.id
+                            )
 
-                    # Send WebSocket notification for questions ready
-                    await ws_manager.send_questions_ready(
-                        user_id,
-                        course_id,
-                        chapter_db.id,
-                        {"questions_count": len(response_tester["questions"])},
-                    )
+                        # Send WebSocket notification for questions ready
+                        await ws_manager.send_questions_ready(
+                            user_id,
+                            course_id,
+                            chapter_db.id,
+                            {"questions_count": len(response_tester["questions"])},
+                        )
+                    else:
+                        logger.warning(
+                            f"TesterAgent failed for chapter {idx + 1}: {response_tester.get('message', 'Unknown error')}"
+                        )
+                        # Create empty questions list for failed chapters
+                        with get_db_context() as db:
+                            await self.save_questions(db, [], chapter_db.id)
                 else:
                     logger.warning(
                         f"ExplainerAgent failed for chapter {idx + 1}, skipping tester agent and questions"
