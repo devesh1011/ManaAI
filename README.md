@@ -61,3 +61,7 @@ Our AI-powered system analyzes your learning style, strengths, weaknesses, and g
 - **Lifelong learners** exploring new interests
 - **Educators** creating personalized learning experiences
 - **Anyone** who wants to learn more effectively
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
