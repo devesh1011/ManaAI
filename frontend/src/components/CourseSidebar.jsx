@@ -127,7 +127,7 @@ const ChapterLink = ({ chapter, index, handleChapterClick, handleNavigation, cha
 };
 
 const CourseSidebar = ({opened, setopen}) => {
-  const { t } = useTranslation(['navigation', 'app', 'settings']);
+  const { t } = useTranslation(['navigation', 'app']);
   const navigate = useNavigate();
   const location = useLocation();
   const { courseId, chapterId } = useParams();

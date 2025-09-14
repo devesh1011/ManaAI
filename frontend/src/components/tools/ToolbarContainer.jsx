@@ -5,9 +5,6 @@ import { useMediaQuery } from '@mantine/hooks';
 import { IconX, IconPencil } from '@tabler/icons-react';
 import { Resizable } from 're-resizable';
 import ChatTool from './ChatTool';
-import NotesTool from './NotesTool';
-import GeoGebraPlotter from './GeoGebraPlotter';
-import PomodoroTimer from './PomodoroTimer';
 import { useToolbar } from '../../contexts/ToolbarContext';
 import { TOOL_TABS } from './ToolUtils';
 
@@ -103,9 +100,6 @@ function ToolbarContainer({ courseId, chapterId }) {
         <Tabs value={activeTab} onTabChange={handleTabChange} variant="pills">
           <Tabs.List>
             <Tabs.Tab value={TOOL_TABS.CHAT}>Chat</Tabs.Tab>
-            <Tabs.Tab value={TOOL_TABS.NOTES}>Notes</Tabs.Tab>
-            <Tabs.Tab value={TOOL_TABS.PLOTTER}>Plotter</Tabs.Tab>
-            <Tabs.Tab value={TOOL_TABS.POMODORO}>Pomodoro</Tabs.Tab>
           </Tabs.List>
         </Tabs>
         <Tooltip label={t('buttons.closeToolbar')} withArrow>
@@ -136,9 +130,6 @@ function ToolbarContainer({ courseId, chapterId }) {
         },
       }}>
         {activeTab === TOOL_TABS.CHAT && <ChatTool isOpen={toolbarOpen} courseId={courseId} chapterId={chapterId} />}
-        {activeTab === TOOL_TABS.NOTES && <NotesTool isOpen={toolbarOpen} courseId={courseId} chapterId={chapterId} />}
-        {activeTab === TOOL_TABS.PLOTTER && <GeoGebraPlotter isOpen={toolbarOpen} />}
-        {activeTab === TOOL_TABS.POMODORO && <PomodoroTimer />}
       </Box>
     </Resizable>
   );
