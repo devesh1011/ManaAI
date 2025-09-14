@@ -28,6 +28,7 @@ from ..schemas.course import (
     CourseInfo,
     CourseRequest,
     Chapter as ChapterSchema,
+    CourseStatus,
 )
 
 
@@ -117,7 +118,7 @@ async def get_course_by_id(
     return CourseInfo(
         course_id=int(course.id),
         total_time_hours=int(course.total_time_hours),
-        status=str(course.status),
+        status=course.status.value,  # Use the string value directly
         title=str(course.title),
         description=str(course.description),
         chapter_count=(
@@ -207,6 +208,16 @@ async def mark_chapter_complete(
     chapter.is_completed = True
     db.commit()
     db.refresh(chapter)
+
+    # Send WebSocket notification for chapter update
+    await ws_manager.send_chapter_updated(
+        str(current_user.id),
+        course_id,
+        {
+            "chapter_id": chapter.id,
+            "is_completed": chapter.is_completed,
+        },
+    )
 
     return {
         "message": f"Chapter '{chapter.caption}' marked as completed",

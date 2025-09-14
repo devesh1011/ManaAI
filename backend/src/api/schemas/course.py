@@ -1,6 +1,16 @@
 from typing import List, Dict, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
+from enum import Enum
+
+
+class CourseStatus(str, Enum):
+    """Course status enumeration for API responses."""
+
+    CREATING = "creating"
+    UPDATING = "updating"
+    FINISHED = "finished"
+    FAILED = "failed"
 
 
 class CourseRequest(BaseModel):
@@ -35,7 +45,7 @@ class CourseInfo(BaseModel):
 
     course_id: int
     total_time_hours: int
-    status: str
+    status: CourseStatus  # Use enum instead of str for type safety
     # Information from the agent
     title: Optional[str] = None
     description: Optional[str] = None
