@@ -15,7 +15,6 @@ import {
   } from '@mantine/core';
   import { IconRocket, IconCheck } from '@tabler/icons-react';
   import { useTranslation } from 'react-i18next';
-  import { useNavigate } from 'react-router-dom';
   // Import framer-motion for animations
   import { motion } from 'framer-motion';
   
@@ -111,7 +110,6 @@ import {
   
   const PremiumModal = ({ opened, onClose, limitReached = false }) => {
     const { t } = useTranslation('createCourse');
-    const navigate = useNavigate();
     const { classes } = useStyles();
   
     // We return null if not opened, this is good practice to prevent unnecessary renders.
@@ -214,7 +212,7 @@ import {
                   radius="md"
                   onClick={() => {
                     onClose();
-                    navigate('/pricing');
+                    // navigate('/pricing'); // Pricing page removed
                   }}
                   rightIcon={<IconRocket size={rem(18)} />}
                 >
