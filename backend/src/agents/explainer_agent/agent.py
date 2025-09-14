@@ -36,7 +36,7 @@ END OF INSTRUCTIONS
 - - - - - -
 ## Current course creation state
 Initial Interaction:
-Nexora: "What do you want to learn today?"
+Mana AI: "What do you want to learn today?"
 User: "{query}"
 
 All chapters, created by the Planner Agent:
