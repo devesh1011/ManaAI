@@ -38,7 +38,7 @@ function ChapterView() {
   const navigate = useNavigate();
   const location = useLocation(); // Get location to read query params
   const { toolbarOpen, toolbarWidth } = useToolbar();
-  const { chapters } = useCourse();
+  const { chapters, updateChapters } = useCourse();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Read tab from URL, default to 'content'
@@ -309,6 +309,15 @@ function ChapterView() {
     try {
       setMarkingComplete(true);
       await courseService.markChapterComplete(courseId, chapterId);
+      
+      // Update the chapter status in the context immediately
+      const updatedChapters = chapters.map(ch => 
+        ch.id.toString() === chapterId 
+          ? { ...ch, is_completed: true } 
+          : ch
+      );
+      updateChapters(updatedChapters);
+      
       toast.success(t('toast.markedCompleteSuccess'));
       navigate(`/dashboard/courses/${courseId}`);
     } catch (error) {
@@ -520,6 +529,7 @@ function ChapterView() {
                   courseId={courseId}
                   chapterId={chapterId}
                   onQuestionCountChange={(count) => {
+                    console.log('ChapterView: Quiz onQuestionCountChange called with count:', count);
                     setQuestionCount(count);
                     setHasQuestions(count > 0);
                   }}

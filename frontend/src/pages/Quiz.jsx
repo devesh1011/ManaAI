@@ -338,14 +338,13 @@ const Quiz = ({ courseId, chapterId, onQuestionCountChange }) => {
         setError(null);
       } catch (error) {
         setError('Failed to load quiz questions');
-        console.error('Error fetching quiz questions:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchQuiz();
-  }, [courseId, chapterId]);
+  }, [courseId, chapterId, onQuestionCountChange]);
 
   const handleMCAnswerChange = async (questionId, value) => {
     setMcAnswers(prev => ({ ...prev, [questionId]: value }));

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useCourse } from '../contexts/CourseContext';
+import { COURSE_STATUS } from '../utils/courseConstants';
 
 import {
   Container,
@@ -549,7 +550,7 @@ function CourseView() {
                     </Box>
                   </Group>
 
-                  {course.status !== "creating" && chapters.length > 0 && chapters[0]?.id !== null && (
+                  {course.status !== COURSE_STATUS.CREATING && chapters.length > 0 && chapters[0]?.id !== null && (
                     <Button
                       size="md"
                       variant="gradient"
@@ -619,7 +620,7 @@ function CourseView() {
               </Text>
             </Box>
 
-            {course.status !== "creating" && chapters.length > 0 && (
+            {course.status !== COURSE_STATUS.CREATING && chapters.length > 0 && (
               <Group spacing="xs">
                 <ThemeIcon
                   size={34}
