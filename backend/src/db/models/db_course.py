@@ -92,9 +92,10 @@ class Chapter(Base):
     # This makes ordering chapters by their index for a given course very fast.
     __table_args__ = (
         Index("ix_chapter_course_id_index", "course_id", "index"),
-        Index("ix_chapter_caption_fulltext", "caption", mysql_prefix="FULLTEXT"),
-        Index("ix_chapter_summary_fulltext", "summary", mysql_prefix="FULLTEXT"),
-        Index("ix_chapter_content_fulltext", "content", mysql_prefix="FULLTEXT"),
+        # Fulltext indexes removed for TiDB Cloud compatibility
+        # Index("ix_chapter_caption_fulltext", "caption", mysql_prefix="FULLTEXT"),
+        # Index("ix_chapter_summary_fulltext", "summary", mysql_prefix="FULLTEXT"),
+        # Index("ix_chapter_content_fulltext", "content", mysql_prefix="FULLTEXT"),
     )
 
 
