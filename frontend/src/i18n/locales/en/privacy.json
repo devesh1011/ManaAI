@@ -4,10 +4,7 @@
   "sections": {
     "responsibleParty": {
       "title": "a) Name and Address of the Controller",
-      "content": [
-        "Nexora",
-        "Email: nexora-ai+markus@obermui.de"
-      ]
+      "content": ["Mana AI", "Email: mana-ai+markus@obermui.de"]
     },
     "dataProtectionOfficer": {
       "title": "b) Name and Address of the Data Protection Officer",
@@ -15,7 +12,7 @@
         "If you have any questions regarding data protection, you can reach us at the following address:",
         "",
         "Data Protection Officer",
-        "Email: nexora-ai+markus@obermui.de"
+        "Email: mana-ai+markus@obermui.de"
       ]
     },
     "processingPurposes": {

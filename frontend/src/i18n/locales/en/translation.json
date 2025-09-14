@@ -30,13 +30,13 @@
     "settings": "Settings",
     "adminArea": "Admin Area",
     "about": "About",
-    "nexora": "About Nexora"
+    "nexora": "About Mana AI"
   },
   "landingPage": {
     "hero": {
       "titlePart1": "Personalized Learning with",
       "titlePart2": "AI-Powered Courses",
-      "subtitle": "Nexora is a next-generation AI learning assistant that creates personalized courses tailored to your learning style, goals, and schedule.",
+      "subtitle": "Mana AI is a next-generation AI learning assistant that creates personalized courses tailored to your learning style, goals, and schedule.",
       "getStarted": "Get Started",
       "login": "Log In",
       "exploreCourses": "Explore Courses",
@@ -45,7 +45,7 @@
       "imageCaption": "Next-gen learning, powered by AI"
     },
     "features": {
-      "title": "How Nexora Transforms Your Learning",
+      "title": "How Mana AI Transforms Your Learning",
       "feature1Title": "Personalized Curriculum",
       "feature1Text": "AI-generated content tailored specifically to your goals and learning style.",
       "feature2Title": "Progress Tracking",
@@ -56,7 +56,7 @@
       "feature4Text": "Test your knowledge with smart quizzes that reinforce your understanding."
     },
     "howItWorks": {
-      "title": "How Nexora Works",
+      "title": "How Mana AI Works",
       "subtitle": "Start your AI-powered learning journey in three simple steps.",
       "step1Title": "Tell Us Your Goals",
       "step1Text": "Define what you want to learn and your preferred learning style.",
@@ -66,24 +66,24 @@
       "step3Text": "Engage with interactive lessons and track your progress towards mastery.",
       "step4Title": "Master new skills",
       "step4Text": "Apply your knowledge with confidence",
-      "imageAlt": "How Nexora Works illustration",
+      "imageAlt": "How Mana AI Works illustration",
       "cta": "Start Learning Today"
     },
     "testimonials": {
       "title": "What Our Learners Say",
-      "quote1": "Nexora's AI-driven approach helped me master Python programming faster than I ever thought possible. The personalized feedback was invaluable!",
+      "quote1": "Mana AI's AI-driven approach helped me master Python programming faster than I ever thought possible. The personalized feedback was invaluable!",
       "name1": "John Doe",
       "role1": "Software Developer",
       "quote2": "The interactive quizzes and adaptive content really helped me understand machine learning concepts that I had struggled with before.",
       "name2": "Jane Smith",
       "role2": "Data Scientist",
-      "quote3": "As a busy professional, I appreciate how Nexora fits learning into my schedule. The bite-sized lessons are perfect for my limited time.",
+      "quote3": "As a busy professional, I appreciate how Mana AI fits learning into my schedule. The bite-sized lessons are perfect for my limited time.",
       "name3": "Robert Johnson",
       "role3": "Marketing Manager"
     },
     "cta": {
       "title": "Ready to Transform Your Learning Journey?",
-      "subtitle": "Join thousands of learners who have accelerated their skills development with Nexora's AI-powered learning platform.",
+      "subtitle": "Join thousands of learners who have accelerated their skills development with Mana AI's AI-powered learning platform.",
       "getStartedFree": "Get Started for Free",
       "createNextCourse": "Create Your Next Course"
     }
@@ -212,17 +212,17 @@
       "loadUsersGeneral": "Failed to load users. Please try again."
     },
     "accessDenied": {
-        "title": "Access Denied",
-        "message": "This page requires administrator privileges."
+      "title": "Access Denied",
+      "message": "This page requires administrator privileges."
     }
   },
   "about": {
     "mainTitle": {
       "about": "About ",
-      "nexora": "Nexora"
+      "nexora": "Mana AI"
     },
-    "mainDescription": "Nexora is not just another learning platform — it's a revolutionary approach to education that harnesses the power of artificial intelligence to create truly personalized learning pathways that evolve with you.",
-    "learningApproach": "Our AI-powered system analyzes your learning style, strengths, weaknesses, and goals to craft custom courses that adapt in real-time as you progress. Whether you're picking up a new skill, deepening your expertise, or exploring entirely new fields of knowledge, Nexora is your AI learning companion on the journey.",
+    "mainDescription": "Mana AI is not just another learning platform — it's a revolutionary approach to education that harnesses the power of artificial intelligence to create truly personalized learning pathways that evolve with you.",
+    "learningApproach": "Our AI-powered system analyzes your learning style, strengths, weaknesses, and goals to craft custom courses that adapt in real-time as you progress. Whether you're picking up a new skill, deepening your expertise, or exploring entirely new fields of knowledge, Mana AI is your AI learning companion on the journey.",
     "buttons": {
       "startYourJourney": "Start Your Journey"
     },
@@ -249,7 +249,7 @@
       },
       "event2": {
         "title": "Foundation",
-        "description": "Nexora was officially launched with seed funding from education technology investors",
+        "description": "Mana AI was officially launched with seed funding from education technology investors",
         "date": "June 2023"
       },
       "event3": {
@@ -402,7 +402,7 @@
     "account": "Account"
   },
   "app": {
-    "title": "Nexora",
+    "title": "Mana AI",
     "poweredBy": "Powered by AI"
   },
   "admin": {
@@ -411,7 +411,7 @@
     "closeAlert": "Close alert"
   },
   "footer": {
-    "copyright": "© {{year}} Nexora Learning Platform. All rights reserved."
+    "copyright": "© {{year}} Mana AI Learning Platform. All rights reserved."
   },
   "chatTool": {
     "welcomeMessage": "Hello! I can answer questions about this chapter content. How can I help you?",
@@ -422,17 +422,6 @@
     "aiSender": "AI Assistant",
     "inputPlaceholder": "Type your question...",
     "sendButton": "Send"
-  },
-  "geoGebraPlotter": {
-    "title": "GeoGebra Plotter",
-    "description": "Use this interactive GeoGebra plotter to visualize mathematical concepts.",
-    "iframeTitle": "GeoGebra Graphing Calculator"
-  },
-  "notesTool": {
-    "title": "Notes for this chapter",
-    "newNotePlaceholder": "New note...",
-    "addButton": "Add",
-    "noNotes": "No notes available."
   },
   "courseView": {
     "loading": "Loading course data...",

@@ -1,10 +1,10 @@
 {
   "mainTitle": {
     "about": "About ",
-    "nexora": "Nexora"
+    "nexora": "Mana AI"
   },
-  "mainDescription": "Nexora is not just another learning platform — it's a revolutionary approach to education that harnesses the power of artificial intelligence to create truly personalized learning pathways that evolve with you.",
-  "learningApproach": "Our AI-powered system analyzes your learning style, strengths, weaknesses, and goals to craft custom courses that adapt in real-time as you progress. Whether you're picking up a new skill, deepening your expertise, or exploring entirely new fields of knowledge, Nexora is your AI learning companion on the journey.",
+  "mainDescription": "Mana AI is not just another learning platform — it's a revolutionary approach to education that harnesses the power of artificial intelligence to create truly personalized learning pathways that evolve with you.",
+  "learningApproach": "Our AI-powered system analyzes your learning style, strengths, weaknesses, and goals to craft custom courses that adapt in real-time as you progress. Whether you're picking up a new skill, deepening your expertise, or exploring entirely new fields of knowledge, Mana AI is your AI learning companion on the journey.",
   "buttons": {
     "startYourJourney": "Start Your Journey"
   },
@@ -31,7 +31,7 @@
     },
     "event2": {
       "title": "Foundation",
-      "description": "Nexora was officially launched with seed funding from education technology investors",
+      "description": "Mana AI was officially launched with seed funding from education technology investors",
       "date": "June 2023"
     },
     "event3": {

@@ -1,13 +1,9 @@
 {
   "buttons": {
     "closeToolbar": "Close toolbar",
-    "openPlotter": "Open GeoGebra plotter tool",
-    "openChat": "Open AI chat tool",
-    "openNotes": "Open notes tool"
+    "openChat": "Open AI chat tool"
   },
   "tabs": {
-    "plotter": "GeoGebra Plotter Tool",
-    "chat": "AI Chat Tool",
-    "notes": "Notes Tool"
+    "chat": "AI Chat Tool"
   }
 }
