@@ -14,50 +14,52 @@ class AnkiDeckGenerator:
         self.output_dir = Path("/tmp/anki_output")
         self.output_dir.mkdir(exist_ok=True)
 
-    def create_testing_deck(self, questions: List[MultipleChoiceQuestion], deck_name: str, pdf_filename: str = None) -> str:
+    def create_testing_deck(
+        self,
+        questions: List[MultipleChoiceQuestion],
+        deck_name: str,
+        pdf_filename: str = None,
+    ) -> str:
         """Create Anki deck for multiple choice questions with clickable options."""
         # Create model for interactive multiple choice
         model = genanki.Model(
             1607392319,
-            'Interactive Multiple Choice',
+            "Interactive Multiple Choice",
             fields=[
-                {'name': 'Question'},
-                {'name': 'ChoiceA'},
-                {'name': 'ChoiceB'},
-                {'name': 'ChoiceC'},
-                {'name': 'ChoiceD'},
-                {'name': 'CorrectAnswer'},
-                {'name': 'Explanation'},
+                {"name": "Question"},
+                {"name": "ChoiceA"},
+                {"name": "ChoiceB"},
+                {"name": "ChoiceC"},
+                {"name": "ChoiceD"},
+                {"name": "CorrectAnswer"},
+                {"name": "Explanation"},
             ],
             templates=[
                 {
-                    'name': 'Card 1',
-                    'qfmt': self._get_front_template(),
-                    'afmt': self._get_back_template(),
+                    "name": "Card 1",
+                    "qfmt": self._get_front_template(),
+                    "afmt": self._get_back_template(),
                 },
             ],
-            css=self._get_mcq_css()
+            css=self._get_mcq_css(),
         )
 
         # Create deck
-        deck = genanki.Deck(
-            2059400110,
-            deck_name
-        )
+        deck = genanki.Deck(2059400110, deck_name)
 
-        # Add questions as notes
+        # Add questions as flashcards
         for question in questions:
             note = genanki.Note(
                 model=model,
                 fields=[
                     question.question,
-                    question.options['A'],
-                    question.options['B'],
-                    question.options['C'],
-                    question.options['D'],
+                    question.options["A"],
+                    question.options["B"],
+                    question.options["C"],
+                    question.options["D"],
                     question.correct_answer,
-                    question.explanation
-                ]
+                    question.explanation,
+                ],
             )
             deck.add_note(note)
 
@@ -74,29 +76,31 @@ class AnkiDeckGenerator:
 
         return str(output_path)
 
-    def create_learning_deck(self, cards: List[LearningCard], deck_name: str, pdf_filename: str = None) -> str:
+    def create_learning_deck(
+        self, cards: List[LearningCard], deck_name: str, pdf_filename: str = None
+    ) -> str:
         """Create Anki deck for learning flashcards."""
         # Create model for basic front/back cards
         model = genanki.Model(
             1607392320,
-            'Learning Flashcard',
+            "Learning Flashcard",
             fields=[
-                {'name': 'Front'},
-                {'name': 'Back'},
-                {'name': 'Chapter'},
-                {'name': 'Image'},
+                {"name": "Front"},
+                {"name": "Back"},
+                {"name": "Chapter"},
+                {"name": "Image"},
             ],
             templates=[
                 {
-                    'name': 'Card 1',
-                    'qfmt': '''
+                    "name": "Card 1",
+                    "qfmt": """
                     <div class="card-container">
                         <div class="chapter-tag">{{Chapter}}</div>
                         <div class="front-content">{{Front}}</div>
                         {{#Image}}<div class="image-container">{{Image}}</div>{{/Image}}
                     </div>
-                    ''',
-                    'afmt': '''
+                    """,
+                    "afmt": """
                     <div class="card-container">
                         <div class="chapter-tag">{{Chapter}}</div>
                         <div class="front-content">{{Front}}</div>
@@ -104,10 +108,10 @@ class AnkiDeckGenerator:
                         <div class="back-content">{{Back}}</div>
                         {{#Image}}<div class="image-container">{{Image}}</div>{{/Image}}
                     </div>
-                    ''',
+                    """,
                 },
             ],
-            css='''
+            css="""
             .card-container {
                 font-family: Arial, sans-serif;
                 max-width: 600px;
@@ -158,19 +162,16 @@ class AnkiDeckGenerator:
                 background-color: #ddd;
                 margin: 20px 0;
             }
-            '''
+            """,
         )
 
         # Create deck
-        deck = genanki.Deck(
-            2059400111,
-            deck_name
-        )
+        deck = genanki.Deck(2059400111, deck_name)
 
         # Collect media files
         media_files = []
 
-        # Add cards as notes
+        # Add cards as flashcards
         for card in cards:
             # Handle image if present
             image_html = ""
@@ -180,13 +181,7 @@ class AnkiDeckGenerator:
                 image_html = f'<img src="{image_filename}" alt="Chapter illustration">'
 
             note = genanki.Note(
-                model=model,
-                fields=[
-                    card.front,
-                    card.back,
-                    card.chapter,
-                    image_html
-                ]
+                model=model, fields=[card.front, card.back, card.chapter, image_html]
             )
             deck.add_note(note)
 
@@ -206,7 +201,7 @@ class AnkiDeckGenerator:
 
     def _get_persistence_script(self) -> str:
         """Get the persistence script for storing user selections."""
-        return '''
+        return """
 <script>
 // Anki Persistence - Simplified version of https://github.com/SimonLammer/anki-persistence
 if (void 0 === window.Persistence) {
@@ -250,11 +245,13 @@ if (void 0 === window.Persistence) {
     }
 }
 </script>
-'''
+"""
 
     def _get_front_template(self) -> str:
         """Get the front template for interactive multiple choice cards."""
-        return self._get_persistence_script() + '''
+        return (
+            self._get_persistence_script()
+            + """
 <div class="mcq-container">
     <div class="question">{{Question}}</div>
     <div class="choices">
@@ -279,11 +276,14 @@ function selectChoice(element) {
     window.selectedAnswer = element.getAttribute('data-choice');
 }
 </script>
-'''
+"""
+        )
 
     def _get_back_template(self) -> str:
         """Get the back template for interactive multiple choice cards."""
-        return self._get_persistence_script() + '''
+        return (
+            self._get_persistence_script()
+            + """
 <div class="mcq-container">
     <div class="question">{{Question}}</div>
     <div class="choices">
@@ -334,11 +334,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-'''
+"""
+        )
 
     def _get_mcq_css(self) -> str:
         """Get the CSS styles for multiple choice cards."""
-        return '''
+        return """
 .mcq-container {
     font-family: Arial, sans-serif;
     max-width: 600px;
@@ -431,4 +432,4 @@ document.addEventListener('DOMContentLoaded', function() {
         padding: 10px 12px;
     }
 }
-'''
+"""

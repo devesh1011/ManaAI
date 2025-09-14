@@ -95,9 +95,11 @@ class TestingFlashcardAgent(StandardAgent):
                 # Add credit note to explanation
                 explanation = q_data.get("explanation", "")
                 if explanation:
-                    explanation += "\n\n---\n*Created with Nexora-AI* - [nexora-ai.de](https://nexora-ai.de)"
+                    explanation += "\n\n---\n*Created with Mana AI* - [mana-ai.de](https://mana-ai.de)"
                 else:
-                    explanation = "---\n*Created with Nexora-AI* - [nexora-ai.de](https://nexora-ai.de)"
+                    explanation = (
+                        "---\n*Created with Mana AI* - [mana-ai.de](https://mana-ai.de)"
+                    )
 
                 question = MultipleChoiceQuestion(
                     question=q_data["question"],
@@ -234,9 +236,9 @@ class TestingFlashcardAgent(StandardAgent):
                     # Add credit note to explanation
                     explanation = q_data.get("explanation", "")
                     if explanation:
-                        explanation += "\n\n---\n*Created with Nexora-AI* - [nexora-ai.de](https://nexora-ai.de)"
+                        explanation += "\n\n---\n*Created with Mana AI* - [mana-ai.de](https://mana-ai.de)"
                     else:
-                        explanation = "---\n*Created with Nexora-AI* - [nexora-ai.de](https://nexora-ai.de)"
+                        explanation = "---\n*Created with Mana AI* - [mana-ai.de](https://mana-ai.de)"
 
                     question = MultipleChoiceQuestion(
                         question=q_data["question"],
