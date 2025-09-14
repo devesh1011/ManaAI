@@ -9,7 +9,6 @@ from .models import (
     Chat,
     Document,
     Image,
-    Note,
     Usage,
 )
 
@@ -27,6 +26,5 @@ __all__ = [
     "Chat",
     "Document",
     "Image",
-    "Note",
     "Usage",
 ]

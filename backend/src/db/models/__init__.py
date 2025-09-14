@@ -4,7 +4,6 @@ from .db_user import User
 from .db_course import Course, Chapter, PracticeQuestion
 from .db_chat import Chat
 from .db_file import Document, Image
-from .db_note import Note
 from .db_usage import Usage
 from .db_vector import VectorEmbedding, VectorIndex
 
@@ -20,8 +19,6 @@ __all__ = [
     # File models
     "Document",
     "Image",
-    # Note models
-    "Note",
     # Usage models
     "Usage",
     # Vector models

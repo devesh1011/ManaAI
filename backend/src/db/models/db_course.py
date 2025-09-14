@@ -53,8 +53,6 @@ class Course(Base):
     chapter_count = Column(Integer, nullable=True)
     error_msg = Column(Text, nullable=True)
 
-    is_public = Column(Boolean, default=False)
-
     # Relationships
     chapters = relationship(
         "Chapter", back_populates="course", cascade="all, delete-orphan"
@@ -90,7 +88,6 @@ class Chapter(Base):
     questions = relationship(
         "PracticeQuestion", back_populates="chapter", cascade="all, delete-orphan"
     )
-    notes = relationship("Note", back_populates="chapter", cascade="all, delete-orphan")
 
     # This makes ordering chapters by their index for a given course very fast.
     __table_args__ = (
