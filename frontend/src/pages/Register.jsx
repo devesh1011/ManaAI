@@ -12,18 +12,13 @@ import {
   Stack,
   Divider,
   Image,
-  useMantineColorScheme,
-  useMantineTheme,
-  Group,
-  Checkbox
+  Group
 } from "@mantine/core";
-import { IconSun, IconMoonStars } from "@tabler/icons-react";
+import { IconBrandGoogleFilled } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { useAuth } from "../contexts/AuthContext";
 import authService from "../api/authService";
-import { IconBrandGoogleFilled } from "@tabler/icons-react";
-import { useTranslation, Trans } from "react-i18next";
-import { Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 
 function Register() {
@@ -32,11 +27,6 @@ function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { register } = useAuth();
-  const { colorScheme } = useMantineColorScheme();
-  const theme = useMantineTheme();
-  
-  // Use white logo for dark theme, black for light theme
-  const logoPath = colorScheme === 'dark' ? '/logo_white.png' : '/logo_black.png';
 
   const form = useForm({
     initialValues: {
@@ -44,33 +34,30 @@ function Register() {
       email: "",
       password: "",
       confirmPassword: "",
-      acceptPrivacyPolicy: false,
     },
     validate: {
       username: (value) =>
         !value
-          ? t("usernameRequired")
+          ? t("usernameRequired") || "Username is required"
           : value.length < 3
-          ? t("usernameLength", "Username must be at least 3 characters")
+          ? t("usernameTooShort") || "Username must be at least 3 characters"
+          : !/^[a-zA-Z0-9_]+$/.test(value)
+          ? t("usernameInvalid") || "Username can only contain letters, numbers, and underscores"
           : null,
       email: (value) =>
         !value
-          ? t("emailRequired", "Email is required")
-          : !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
-          ? t("emailInvalid", "Please enter a valid email address (e.g., example@domain.com)")
+          ? t("emailRequired") || "Email is required"
+          : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          ? t("emailInvalid") || "Invalid email format"
           : null,
       password: (value) =>
         !value
-          ? t("passwordRequired")
-          : value.length < 3
-          ? t("passwordLength")
+          ? t("passwordRequired") || "Password is required"
+          : value.length < 8
+          ? t("passwordTooShort") || "Password must be at least 8 characters"
           : null,
       confirmPassword: (value, values) =>
-        value !== values.password
-          ? t("passwordsDoNotMatch", "Passwords do not match")
-          : null,
-      acceptPrivacyPolicy: (value) =>
-        !value ? t("privacyPolicyRequired") : null,
+        value !== values.password ? t("passwordMismatch") || "Passwords do not match" : null,
     },
   });
 
@@ -255,23 +242,12 @@ function Register() {
               {...form.getInputProps("confirmPassword")}
             />
 
-            <Checkbox
-                mt="md"
-                label={
-                  <Trans i18nKey="auth:privacyPolicyAcceptance" components={[<RouterLink to={t('auth:privacyPolicyLink')} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }} />]}/>
-                }
-                required
-                {...form.getInputProps('acceptPrivacyPolicy', { type: 'checkbox' })}
-                style={{ marginTop: '1.5rem' }}
-              />
-
               <Button 
                 fullWidth 
                 type="submit" 
                 size="md" 
                 loading={isLoading} 
                 style={{ height: 46 }}
-                disabled={!form.values.acceptPrivacyPolicy}
               >
                 {t("signUp")}
               </Button>
