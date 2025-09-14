@@ -54,12 +54,6 @@ Our AI-powered system analyzes your learning style, strengths, weaknesses, and g
 - **Interactive**: Engaging quizzes, exercises, and AI assistance
 - **Accessible**: Learn anytime, anywhere, at your own pace
 
-## 🏆 Success Stories
-
-_"Mana AI's AI-driven approach helped me master Python programming faster than I ever thought possible. The personalized feedback was invaluable!"_
-
-_"As a busy professional, I appreciate how Mana AI fits learning into my schedule. The bite-sized lessons are perfect for my limited time."_
-
 ## 🎯 Perfect For
 
 - **Students** looking to accelerate their learning
@@ -67,30 +61,3 @@ _"As a busy professional, I appreciate how Mana AI fits learning into my schedul
 - **Lifelong learners** exploring new interests
 - **Educators** creating personalized learning experiences
 - **Anyone** who wants to learn more effectively
-
-## 🌐 Get Started
-
-Ready to transform your learning experience?
-
-1. Visit [Mana-ai.de](https://Mana-ai.de)
-2. Create your free account
-3. Tell us what you want to learn
-4. Start your personalized learning journey
-
-## 📞 Contact & Support
-
-Have questions or need help? We're here for you!
-
-- **Website**: [Mana-ai.de](https://Mana-ai.de)
-- **Email**: hello@mana-ai.de
-- **Support**: Available 24/7 through our AI chat assistants
-
----
-
-<div align="center">
-
-**Join thousands of learners who have accelerated their skills development with Mana AI's AI-powered learning platform.**
-
-_Made with 💡 and 🧠 by the Mana AI Team._
-
-</div>
