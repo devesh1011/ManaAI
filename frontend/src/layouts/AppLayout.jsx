@@ -5,7 +5,6 @@ import {
   Link as RouterLink,
   useNavigate,
   useLocation,
-  useMatch,
 } from "react-router-dom";
 import {
   AppShell,
@@ -28,16 +27,8 @@ import {
   Drawer,
   Paper,
 } from "@mantine/core";
-import {
-  fadeIn,
-  slideUp,
-  scaleIn,
-  buttonHover,
-  pageTransition,
-} from "../utils/animations";
 import { useMediaQuery, useViewportSize } from "@mantine/hooks";
 import {
-  IconSettings,
   IconSun,
   IconMoonStars,
   IconUser,
@@ -55,7 +46,7 @@ import {
   IconBook,
 } from "@tabler/icons-react";
 import AppFooter from "../components/AppFooter";
-import TrackActivity from "../components/TrackActivity";
+// import TrackActivity from "../components/TrackActivity";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import CourseSidebar from "../components/CourseSidebar"; // Import the new component
@@ -180,7 +171,7 @@ function AppLayout() {
   const location = useLocation(); // Use useLocation to get current path
   const { user, logout } = useAuth();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const { t } = useTranslation(["navigation", "app", "settings"]);
+  const { t } = useTranslation(["navigation", "app"]);
   const dark = colorScheme === "dark";
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [opened, setOpened] = useState(!isMobile);
@@ -197,9 +188,6 @@ function AppLayout() {
     /\/dashboard\/courses\/(\d+)/
   );
   const isCoursePage = !!courseViewMatch;
-
-  // Toggle navbar visibility
-  const toggleNavbar = () => setOpened((o) => !o);
 
   // Update opened state when screen size changes
   useEffect(() => {
@@ -239,12 +227,6 @@ function AppLayout() {
       color: "teal",
       label: t("newCourse", { ns: "navigation" }),
       to: "/dashboard/create-course",
-    },
-    {
-      icon: <IconWorld size={22} />,
-      color: "orange",
-      label: t("publicCourses", { ns: "navigation", defaultValue: "Public Courses" }),
-      to: "/dashboard/public-courses",
     },
     // Admin link - only shown to admin users
     ...(user?.is_admin
@@ -293,11 +275,9 @@ function AppLayout() {
     navigate("/auth/login");
   };
 
-  const isDashboard = useMatch("/dashboard");
-
   return (
     <>
-      <TrackActivity user={user} />
+      {/* <TrackActivity user={user} /> */}
       {/* FIX 1: Removed the <AnimatePresence> wrapper from here. It was causing errors by wrapping multiple static children. */}
       <AppShell
         styles={{
@@ -738,19 +718,6 @@ function AppLayout() {
                     }}
                   >
                     <Menu.Item
-                      icon={<IconSettings size={14} />}
-                      onClick={() => navigate("/dashboard/settings")}
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: dark
-                            ? theme.colors.dark[6]
-                            : theme.colors.gray[1],
-                        },
-                      }}
-                    >
-                      {t("settings", { ns: "navigation" })}
-                    </Menu.Item>
-                    <Menu.Item
                       icon={
                         dark ? (
                           <IconSun size={14} />
@@ -767,7 +734,7 @@ function AppLayout() {
                         },
                       }}
                     >
-                      {t("theme", { ns: "settings" })}
+                      {t("theme", { ns: "app" })}
                     </Menu.Item>
 
                     <Menu.Item
@@ -855,12 +822,6 @@ function AppLayout() {
                       }}
                     >
                       <Menu.Item
-                        icon={<IconSettings size={14} />}
-                        onClick={() => navigate("/dashboard/settings")}
-                      >
-                        {t("settings", { ns: "navigation" })}
-                      </Menu.Item>
-                      <Menu.Item
                         icon={
                           dark ? (
                             <IconSun size={14} />
@@ -870,7 +831,7 @@ function AppLayout() {
                         }
                         onClick={() => toggleColorScheme()}
                       >
-                        {t("theme", { ns: "settings" })}
+                        {t("theme", { ns: "app" })}
                       </Menu.Item>
                       <Menu.Item
                         icon={<IconInfoCircle size={14} />}
@@ -985,20 +946,6 @@ function AppLayout() {
                   />
                 ))}
                 
-                {/* Settings Link */}
-                <MainLink
-                  icon={<IconSettings size={20} />}
-                  color="gray"
-                  label={t("settings", { ns: "navigation" })}
-                  to="/dashboard/settings"
-                  isActive={currentPath === "/dashboard/settings"}
-                  collapsed={false}
-                  onNavigate={() => {
-                    setMobileMenuOpen(false);
-                    navigate("/dashboard/settings");
-                  }}
-                />
-                
                 {/* Logout Link */}
                 <MainLink
                   icon={<IconLogout size={20} />}
@@ -1096,6 +1043,6 @@ function AppLayout() {
       )}
     </>
   );
-};
+}
 
 export default AppLayout;

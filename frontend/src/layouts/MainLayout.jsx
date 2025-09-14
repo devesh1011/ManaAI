@@ -18,7 +18,6 @@ import {
   Text,
 } from '@mantine/core';
 import { 
-  IconSettings,
   IconSun, 
   IconMoonStars, 
   IconUser, 
@@ -254,17 +253,6 @@ function MainLayout() {
                       {t('statistics', { ns: 'navigation' })}
                     </Menu.Item>
                     */}
-                    <Menu.Item 
-                      icon={<IconSettings size={14} />} 
-                      onClick={() => navigate('/dashboard/settings')}
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: dark ? theme.colors.dark[6] : theme.colors.gray[1],
-                        },
-                      }}
-                    >
-                      {t('settings', { ns: 'navigation' })}
-                    </Menu.Item>
                     <Divider />
                     <Menu.Item 
                       icon={<IconInfoCircle size={14} />} 

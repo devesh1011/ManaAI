@@ -20,7 +20,6 @@ import {
   Flex
 } from '@mantine/core';
 import {
-  IconSettings,
   IconSun,
   IconMoonStars,
   IconLogout,
@@ -47,7 +46,7 @@ function CourseLayout() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const { t } = useTranslation(['navigation', 'app', 'settings']);
+  const { t } = useTranslation(['navigation', 'app']);
   const dark = colorScheme === 'dark';
   const { chapters, loading } = useCourse();
 
@@ -192,16 +191,10 @@ function CourseLayout() {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item
-                  icon={<IconSettings size={14} />}
-                  onClick={() => navigate('/dashboard/settings')}
-                >
-                  {t('settings', { ns: 'navigation' })}
-                </Menu.Item>
-                <Menu.Item
                   icon={dark ? <IconSun size={14} /> : <IconMoonStars size={14} />}
                   onClick={() => toggleColorScheme()}
                 >
-                  {t('theme', { ns: 'settings' })}
+                  {t('theme', { ns: 'app' })}
                 </Menu.Item>
                 <Menu.Item
                   icon={<IconInfoCircle size={14} />}
