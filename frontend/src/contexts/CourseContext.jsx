@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { courseService } from '../api/courseService';
 import { useAuth } from './AuthContext';
+import { COURSE_STATUS } from '../utils/courseConstants';
 
 const CourseContext = createContext();
 
@@ -64,11 +65,22 @@ export const CourseProvider = ({ children }) => {
         break;
 
       case 'questions_ready':
-        // Update chapter with quiz questions
+        // Update chapter to indicate questions are ready (will trigger refetch in ChapterView)
+        setChapters(prevChapters =>
+          prevChapters.map(chapter =>
+            chapter.id === message.chapter_id
+              ? { ...chapter, quiz_questions: Array(message.data.questions_count).fill({}) }
+              : chapter
+          )
+        );
+        break;
+
+      case 'chapter_updated':
+        // Update chapter with new data
         setChapters(prevChapters =>
           prevChapters.map(chapter =>
             chapter.id === message.data.chapter_id
-              ? { ...chapter, quiz_questions: message.data.questions }
+              ? { ...chapter, ...message.data }
               : chapter
           )
         );
@@ -77,7 +89,7 @@ export const CourseProvider = ({ children }) => {
       case 'course_completed':
         // Update course status
         setCourse(prevCourse =>
-          prevCourse ? { ...prevCourse, status: 'completed' } : null
+          prevCourse ? { ...prevCourse, status: 'finished' } : null
         );
         setLoading(false);
         break;
@@ -195,6 +207,10 @@ export const CourseProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       setCurrentCourseId(courseId);
+
+      // Clear existing course and chapters data immediately to prevent showing old course data
+      setCourse(null);
+      setChapters([]);
 
       // Connect to WebSocket for real-time updates
       connectWebSocket(courseId);
