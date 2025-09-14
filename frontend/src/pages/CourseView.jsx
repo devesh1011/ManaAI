@@ -84,7 +84,7 @@ function CourseView() {
 
   // NEW: Show video popup after content is ready (with 2 second delay)
   useEffect(() => {
-    if (contentReady && !hasSeenVideo && course?.status === 'CourseStatus.CREATING') {
+    if (contentReady && !hasSeenVideo && course?.status === 'creating') {
       const timer = setTimeout(() => {
         setShowVideoPopup(true);
         // Mark as seen when popup is shown
@@ -98,7 +98,7 @@ function CourseView() {
 
   // Initialize creationProgressUI when course data is available
   useEffect(() => {
-    if (course && course.status === 'CourseStatus.CREATING') {
+    if (course && course.status === 'creating') {
       const totalChapters = course.chapter_count || 0;
       const currentChaptersLength = chapters ? chapters.filter(chapter => chapter.id !== null).length : 0;
       const progressPercent = totalChapters > 0 ? Math.round((currentChaptersLength / totalChapters) * 100) : 0;
@@ -112,7 +112,7 @@ function CourseView() {
         chaptersCreated: currentChaptersLength,
         estimatedTotal: totalChapters,
       });
-    } else if (course && course.status === 'CourseStatus.FINISHED') {
+    } else if (course && course.status === 'finished') {
       const totalChapters = course.chapter_count || 0;
       const currentChaptersLength = chapters ? chapters.filter(chapter => chapter.id !== null).length : 0;
 
@@ -137,8 +137,8 @@ function CourseView() {
       return { learningPercentage: 0, actualCompletedLearningChapters: 0, totalCourseChaptersForLearning: 0 };
     }
     const completedCount = chapters.filter(ch => ch.is_completed).length;
-    // We still get the total count from the main course object, which is good practice.
-    const totalCount = course.chapter_count || chapters.length || 0;
+    // For finished courses, use actual chapter count; for creating courses, use planned count
+    const totalCount = course.status === 'finished' ? chapters.length : (course.chapter_count || chapters.length || 0);
     const percentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
     return {
       learningPercentage: percentage,
@@ -308,7 +308,7 @@ function CourseView() {
        </Alert>
       )}
 
-      {course?.status === "CourseStatus.CREATING" && (
+      {course?.status === "creating" && (
         <Paper
           radius="md"
           p="xl"
@@ -480,7 +480,7 @@ function CourseView() {
                       {t('buttons.backToDashboard')}
                     </Button>
 
-                    {course.status === "CourseStatus.CREATING" ? (
+                    {course.status === "creating" ? (
                       <Badge size="lg" color="blue" variant="filled" px="md" py="sm">
                         <Group spacing="xs" noWrap>
                           <IconClock size={16} />
@@ -549,7 +549,7 @@ function CourseView() {
                     </Box>
                   </Group>
 
-                  {course.status !== "CourseStatus.CREATING" && chapters.length > 0 && chapters[0]?.id !== null && (
+                  {course.status !== "creating" && chapters.length > 0 && chapters[0]?.id !== null && (
                     <Button
                       size="md"
                       variant="gradient"
@@ -619,7 +619,7 @@ function CourseView() {
               </Text>
             </Box>
 
-            {course.status !== "CourseStatus.CREATING" && chapters.length > 0 && (
+            {course.status !== "creating" && chapters.length > 0 && (
               <Group spacing="xs">
                 <ThemeIcon
                   size={34}
@@ -648,7 +648,7 @@ function CourseView() {
             )}
           </Group>
 
-          {course.status === "CourseStatus.CREATING" && chapters.length === 0 && creationProgressUI.estimatedTotal === 0 && (
+          {course.status === "creating" && chapters.length === 0 && creationProgressUI.estimatedTotal === 0 && (
             <Paper withBorder p="xl" radius="md" mb="lg" sx={(theme) => ({
               backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
               textAlign: 'center',
@@ -818,7 +818,7 @@ function CourseView() {
               );
             })}
 
-            {course.status === "CourseStatus.CREATING" &&
+            {course.status === "creating" &&
               creationProgressUI.estimatedTotal > chapters.length &&
               Array.from({ length: creationProgressUI.estimatedTotal - chapters.length }).map((_,idx) => {
                 const placeholderIndex = chapters.length + idx;

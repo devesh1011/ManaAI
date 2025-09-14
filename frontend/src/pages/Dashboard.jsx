@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery, useViewportSize } from '@mantine/hooks';
-import { motion, AnimatePresence } from 'framer-motion';
-import { fadeIn, slideUp, scaleIn, buttonHover, pageTransition } from '../utils/animations';
+import { motion } from 'framer-motion';
 import {
   Container,
   Title,
@@ -172,7 +170,6 @@ function Dashboard() {
   const [courseToRename, setCourseToRename] = useState(null);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
   
   const navigate = useNavigate();
   const theme = useMantineTheme();
@@ -180,10 +177,6 @@ function Dashboard() {
   const { t } = useTranslation('dashboard');
   const { user } = useAuth();
   const [totalLearnTime, setTotalLearnTime] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const { width } = useViewportSize();
-  const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
   // Animation variants
   const container = {
@@ -220,15 +213,10 @@ function Dashboard() {
   // Show limited courses unless "View All" is clicked
   const displayedCourses = viewAllCourses ? courses : courses.slice(0, 3);
 
-  // Calculate total learn time from courses
-  function calculateTotalLearnTime(courses) {
-    return courses.reduce((total, course) => total + (course.estimated_hours || 0), 0);
-  }
-
   // Function to calculate progress for a course
   const calculateProgress = (course) => {
-    if (course.status === 'CourseStatus.COMPLETED') return 100;
-    if (course.status === 'CourseStatus.CREATING') return 0;
+    if (course.status === 'finished') return 100;
+    if (course.status === 'creating') return 0;
     
     return (course && course.chapter_count && course.chapter_count > 0)
       ? Math.round((100 * (course.completed_chapter_count || 0) / course.chapter_count))
@@ -246,7 +234,6 @@ function Dashboard() {
     setCourseToRename(course);
     setNewTitle(course.title || '');
     setNewDescription(course.description || '');
-    setIsPublic(course.is_public || false);
     setRenameModalOpen(true);
   };
 
@@ -270,22 +257,16 @@ function Dashboard() {
     if (!courseToRename) return;
 
     try {
-      // First, update the public status
-      await courseService.updateCoursePublicStatus(courseToRename.course_id, isPublic);
-
-      // Then, update the title and description
+      // Update the title and description
       const updatedCourse = await courseService.updateCourse(
         courseToRename.course_id, 
         newTitle, 
         newDescription
       );
 
-      // Combine updates for the UI
-      const finalUpdatedCourse = { ...updatedCourse, is_public: isPublic };
-
       setCourses(prevCourses =>
         prevCourses.map(course =>
-          course.course_id === courseToRename.course_id ? finalUpdatedCourse : course
+          course.course_id === courseToRename.course_id ? updatedCourse : course
         )
       );
       setRenameModalOpen(false);
@@ -300,15 +281,12 @@ function Dashboard() {
     if (!user?.id) return;
     
     try {
-      setIsLoading(true);
       const data = await statisticsService.getTotalLearnTime(user.id);
       setTotalLearnTime(data ? Math.round(data / 3600 ) : 0);
     } catch (err) {
       console.error('Error fetching total learn time:', err);
       setError('Failed to load learning statistics');
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   }, [user?.id]);
 
   useEffect(() => {
@@ -347,12 +325,11 @@ function Dashboard() {
     const label = t(`status.${status?.replace(/^.*\./, '').toLowerCase()}`, { defaultValue: status || 'Unknown' });
 
     switch (status) {
-      case 'CourseStatus.CREATING':
+      case 'creating':
         return { label, color: 'yellow', Icon: IconLoader };
-      case 'CourseStatus.FINISHED':
-      case 'CourseStatus.COMPLETED':
+      case 'finished':
         return { label, color: 'green', Icon: IconCheck };
-      case 'CourseStatus.FAILED':
+      case 'failed':
         return { label, color: 'red', Icon: IconAlertCircle };
       default:
         return { label, color: 'gray', Icon: IconBook };
@@ -568,21 +545,6 @@ function Dashboard() {
               minRows={3}
               maxRows={6}
               mt="md"
-            />
-
-            <Switch
-              mt="lg"
-              checked={isPublic}
-              onChange={(event) => setIsPublic(event.currentTarget.checked)}
-              label={t('renameModal.publicLabel', { defaultValue: 'Make course public' })}
-              description={t('renameModal.publicDescription', { defaultValue: 'Public courses can be viewed by anyone.' })}
-              thumbIcon={
-                isPublic ? (
-                  <IconWorld size={12} color={theme.colors.teal[6]} stroke={3} />
-                ) : (
-                  <IconX size={12} color={theme.colors.red[6]} stroke={3} />
-                )
-              }
             />
 
             <Group position="right" mt="md">

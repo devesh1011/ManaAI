@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery } from '@mantine/hooks';
 import {
   Container,
   Title,
@@ -21,15 +20,12 @@ import {
   Modal,
   Textarea,
   Switch,
-  rem,
   Progress,
   Badge,
 } from '@mantine/core';
-import SearchBar from '../components/SearchBar';
 import { 
   IconBook, 
   IconAlertCircle, 
-  IconWorld, 
   IconSearch, 
   IconPencil, 
   IconTrash, 
@@ -65,12 +61,11 @@ function MyCourses() {
     const label = t(`status.${status?.replace(/^.*\./, '').toLowerCase()}`, { defaultValue: status });
 
     switch (status) {
-      case 'CourseStatus.CREATING':
+      case 'creating':
         return { label, color: 'yellow', Icon: IconLoader };
-      case 'CourseStatus.FINISHED':
-      case 'CourseStatus.COMPLETED':
+      case 'finished':
         return { label, color: 'green', Icon: IconCheck };
-      case 'CourseStatus.FAILED':
+      case 'failed':
         return { label, color: 'red', Icon: IconAlertCircle };
       default:
         return { label, color: 'gray', Icon: IconBook };
@@ -79,8 +74,8 @@ function MyCourses() {
 
   // Calculate progress for a course
   const calculateProgress = (course) => {
-    if (course.status === 'CourseStatus.COMPLETED') return 100;
-    if (course.status === 'CourseStatus.CREATING') return 0;
+    if (course.status === 'finished') return 100;
+    if (course.status === 'creating') return 0;
     return (course?.chapter_count > 0)
       ? Math.round((100 * (course.completed_chapter_count || 0)) / course.chapter_count)
       : 0;
@@ -150,10 +145,10 @@ function MyCourses() {
   const confirmRenameHandler = async () => {
     if (!courseToRename) return;
     try {
-      // First, update the public status
-      await courseService.updateCoursePublicStatus(courseToRename.course_id, isPublic);
+      // TODO: Update public status when API supports it
+      // await courseService.updateCoursePublicStatus(courseToRename.course_id, isPublic);
 
-      // Then, update the title and description
+      // Update the title and description
       const updatedCourse = await courseService.updateCourse(
         courseToRename.course_id, 
         newTitle, 

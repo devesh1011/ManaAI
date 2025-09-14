@@ -1,4 +1,4 @@
-import { useState, forwardRef, useEffect } from 'react';
+import { useState, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -59,7 +59,6 @@ import { useForm } from '@mantine/form';
 import { toast } from 'react-toastify';
 import { courseService } from '../api/courseService';
 import ReactCountryFlag from 'react-country-flag';
-import PremiumModal from '../components/PremiumModal';
 
 const LanguageSelectItem = forwardRef(({ label, countryCode, ...others }, ref) => (
   <div ref={ref} {...others}>
@@ -85,8 +84,6 @@ function CreateCourse() {
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
-  const [isLimitReached, setIsLimitReached] = useState(false);
   const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -241,36 +238,6 @@ function CreateCourse() {
       
     } catch (err) { 
       console.error('Error initiating course creation:', err);
-      // Handle specific error cases
-      
-      if (err.response?.status === 429) {
-        // Handle rate limiting or course limit errors
-        const errorData = err.response?.data?.detail || {};
-        console.log('Error data:', errorData);
-        
-        if (errorData.code === 'MAX_COURSE_CREATIONS_REACHED' || 
-            errorData.code === 'MAX_PRESENT_COURSES_REACHED') {
-          const errorMessage = t(`errors.${errorData.code === 'MAX_COURSE_CREATIONS_REACHED' ? 'maxCoursesCreated' : 'maxActiveCourses'}`, { limit: errorData.limit });
-          console.log('Showing premium modal for error:', errorMessage);
-          
-          // Set limit reached state and show premium modal
-          setIsLimitReached(true);
-          setShowPremiumModal(true);
-          console.log('showPremiumModal set to:', true, 'with limitReached: true');
-          
-          // Use setTimeout to ensure state update is processed
-          setTimeout(() => {
-            toast.error(errorMessage, {
-              autoClose: 5000,
-              onClose: () => {
-                console.log('Toast closed');
-                setIsSubmitting(false);
-              }
-            });
-          }, 100);
-          return;
-        }
-      }
       // Default error handling
       const errorMessage = err.response?.data?.message || err.response?.data?.detail || err.message || t('errors.unknown');
       setError(errorMessage);
@@ -790,23 +757,13 @@ function CreateCourse() {
 
   if (isSubmitting) {
     return (
-      <>
-        <PremiumModal 
-          opened={showPremiumModal} 
-          onClose={() => {
-            setShowPremiumModal(false);
-            setIsLimitReached(false);
-          }}
-          limitReached={isLimitReached}
-        />
-        <Container size="lg" py="xl">
-          <Paper shadow="md" p="xl" withBorder>
-            <Title order={3} align="center" mb="md">{t('streaming.title') || 'Creating Your Course'}</Title>
-            <Text align="center" mb="md">{t('streaming.description') || 'Please wait while we generate your personalized course...'}</Text>
-            <Progress value={100} animate color="teal" />
-          </Paper>
-        </Container>
-      </>
+      <Container size="lg" py="xl">
+        <Paper shadow="md" p="xl" withBorder>
+          <Title order={3} align="center" mb="md">{t('streaming.title') || 'Creating Your Course'}</Title>
+          <Text align="center" mb="md">{t('streaming.description') || 'Please wait while we generate your personalized course...'}</Text>
+          <Progress value={100} animate color="teal" />
+        </Paper>
+      </Container>
     );
   }
 
@@ -814,16 +771,7 @@ function CreateCourse() {
 
 
   return (
-    <>
-      <PremiumModal 
-        opened={showPremiumModal} 
-        onClose={() => {
-          setShowPremiumModal(false);
-          setIsLimitReached(false);
-        }} 
-        limitReached={isLimitReached}
-      />
-      <Container size="lg" py="xl">
+    <Container size="lg" py="xl">
       
       <Paper 
         radius="lg" 
@@ -930,7 +878,6 @@ function CreateCourse() {
         </Box>
       </Paper>
       </Container>
-    </>
   );
 }
 

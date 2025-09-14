@@ -127,7 +127,7 @@ function Login() {
   return (
     <Container align="center" size={460} my={40}>
       <Group position="center"  align="center" spacing="xs" mb={20}>
-        <Image src={logoPath} width={80} mb="md" alt="Nexora Logo" />
+        <Image src={logoPath} width={80} mb="md" alt="Mana AI Logo" />
         <Stack spacing="xxs">
           <Title order={1} size={32} weight={700} align="center">
             {t("welcomeBack")}
