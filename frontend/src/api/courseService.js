@@ -21,21 +21,7 @@ export const courseService = {
     // Sort chapters by index to ensure correct order
     const sortedChapters = chapters.sort((a, b) => a.index - b.index);
 
-    // Find the first missing index and remove everything from that point onwards
-    const result = [];
-    let expectedIndex = 1;
-
-    for (const chapter of sortedChapters) {
-      if (chapter.index === expectedIndex) {
-        result.push(chapter);
-        expectedIndex++;
-      } else {
-        // Found a gap, stop here
-        break;
-      }
-    }
-
-    return result;
+    return sortedChapters;
   },
 
   // Get a specific chapter by ID
