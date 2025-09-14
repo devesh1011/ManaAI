@@ -58,7 +58,7 @@ class AgentService:
 
         # session
         self.session_service = InMemorySessionService()
-        self.app_name = "Nexora"
+        self.app_name = "Mana AI"
         self.state_manager = StateService()
         self.query_service = QueryService(self.state_manager)
 
@@ -377,9 +377,17 @@ class AgentService:
             # Wait for all chapters to be processed
             await asyncio.gather(*chapter_tasks)
 
-            # Update course status to finished
+            # Count actual chapters created and update course
             with get_db_context() as db:
-                courses_crud.update_course_status(db, course_id, CourseStatus.FINISHED)
+                actual_chapter_count = chapters_crud.get_chapter_count_by_course(
+                    db, course_id
+                )
+                courses_crud.update_course(
+                    db,
+                    course_id,
+                    status=CourseStatus.FINISHED,
+                    chapter_count=actual_chapter_count,
+                )
 
             # Send WebSocket notification for course completed
             await ws_manager.send_course_completed(
@@ -387,7 +395,7 @@ class AgentService:
                 course_id,
                 {
                     "status": "FINISHED",
-                    "total_chapters": len(response_planner["chapters"]),
+                    "total_chapters": actual_chapter_count,
                 },
             )
 
