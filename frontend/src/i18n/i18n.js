@@ -10,7 +10,6 @@ import enLanguage from "./locales/en/language.json";
 import enNavigation from "./locales/en/navigation.json";
 import enChapterView from "./locales/en/chapterView.json";
 import enAdminView from "./locales/en/adminView.json";
-import enAbout from "./locales/en/about.json";
 import enDashboard from "./locales/en/dashboard.json";
 import enAuth from "./locales/en/auth.json";
 import enApp from "./locales/en/app.json";
@@ -19,9 +18,6 @@ import enFooter from "./locales/en/footer.json";
 import enChatTool from "./locales/en/chatTool.json";
 import enCourseView from "./locales/en/courseView.json";
 import enCreateCourse from "./locales/en/createCourse.json";
-import enPricing from "./locales/en/pricing.json";
-import enImpressum from "./locales/en/impressum.json";
-import enPrivacy from "./locales/en/privacy.json";
 import enToolbarContainer from "./locales/en/toolbarContainer.json";
 import enStatisticsPage from "./locales/en/statisticsPage.json";
 
@@ -51,7 +47,6 @@ i18nInstance
         navigation: enNavigation,
         chapterView: enChapterView,
         adminView: enAdminView,
-        about: enAbout,
         dashboard: enDashboard,
         auth: enAuth,
         app: enApp,
@@ -60,9 +55,6 @@ i18nInstance
         chatTool: enChatTool,
         courseView: enCourseView,
         createCourse: enCreateCourse,
-        pricing: enPricing,
-        impressum: enImpressum,
-        privacy: enPrivacy,
         toolbarContainer: enToolbarContainer,
         statisticsPage: enStatisticsPage,
       },
