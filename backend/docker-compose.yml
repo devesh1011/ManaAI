@@ -1,7 +1,7 @@
 services:
   app:
-    container_name: nexora
-    #image: m4rkus28/nexora:latest
+    container_name: mana-ai
+    #image: m4rkus28/mana-ai:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,18 +17,6 @@ services:
     restart: always
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-  chromadb:
-    container_name: nexora-chromadb
-    image: chromadb/chroma:latest
-    environment:
-      - CHROMA_SERVER_HOST=0.0.0.0
-      - CHROMA_SERVER_HTTP_PORT=8000
-      - PERSIST_DIRECTORY=/chroma/chroma
-      - CHROMA_SERVER_ALLOW_RESET=true
-      - CHROMA_SERVER_CORS_ALLOW_ORIGINS=["*"] 
-    volumes:
-      - chroma-data:/chroma/chroma
-    restart: always
 
 volumes:
   chroma-data:
