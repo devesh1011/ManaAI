@@ -17,7 +17,6 @@ import {
   Box,
   Avatar,
   Menu,
-  useMantineColorScheme,
   Badge,
   UnstyledButton,
   Text,
@@ -77,29 +76,23 @@ export const MainLink = ({
       sx={(theme) => ({
         display: "block",
         width: "100%",
-        // Make menu items higher and all the same size
-        minHeight: 32,
-        height: 48,
-        padding: collapsed ? `16px 0` : `16px 16px 16px 16px`, // Adjust padding when collapsed
-        borderRadius: theme.radius.md,
+        minHeight: 48,
+        padding: collapsed ? '16px 0' : '16px',
+        borderRadius: '1rem',
         marginBottom: theme.spacing.xs,
-        color:
-          theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-        backgroundColor: isActive
-          ? theme.colorScheme === "dark"
-            ? theme.colors.dark[5]
-            : theme.colors.gray[1]
-          : "transparent",
-        border: `1px solid ${
-          isActive
-            ? theme.colorScheme === "dark"
-              ? theme.colors.dark[4]
-              : theme.colors.gray[3]
-            : "transparent"
-        }`,
-        transition: "all 0.2s ease",
-        position: "relative",
-        overflow: "hidden",
+        color: theme.black,
+        background: isActive 
+          ? 'linear-gradient(135deg, rgba(156, 123, 172, 0.1), rgba(255, 127, 45, 0.1))'
+          : 'transparent',
+        borderLeft: isActive ? `3px solid ${theme.colors.violet[5]}` : 'none',
+        transition: 'all 0.2s ease',
+        position: 'relative',
+        overflow: 'hidden',
+        
+        "&:hover": {
+          backgroundColor: 'rgba(156, 123, 172, 0.05)',
+          transform: 'translateX(4px)',
+        },
       })}
     >
       <Group
@@ -119,7 +112,8 @@ export const MainLink = ({
           sx={{
             background: `linear-gradient(135deg, ${theme.colors[color][6]}20, ${theme.colors[color][4]}10)`,
             border: `1px solid ${theme.colors[color][6]}30`,
-            marginLeft: collapsed ? 0 : 4, // Adjust margins when collapsed
+            borderRadius: '0.75rem',
+            marginLeft: collapsed ? 0 : 4,
             marginRight: collapsed ? 0 : 8,
           }}
         >
@@ -135,6 +129,7 @@ export const MainLink = ({
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                fontFamily: 'Inter, system-ui, sans-serif',
               }}
             >
               {label}
@@ -170,9 +165,7 @@ function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation(); // Use useLocation to get current path
   const { user, logout } = useAuth();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { t } = useTranslation(["navigation", "app"]);
-  const dark = colorScheme === "dark";
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [opened, setOpened] = useState(!isMobile);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -282,9 +275,7 @@ function AppLayout() {
       <AppShell
         styles={{
           main: {
-            background: dark
-              ? `linear-gradient(160deg, ${theme.colors.dark[8]} 0%, ${theme.colors.dark[7]} 100%)`
-              : `linear-gradient(160deg, ${theme.colors.gray[0]} 0%, ${theme.colors.gray[2]} 100%)`,
+            background: `linear-gradient(160deg, ${theme.colors.gray[0]} 0%, ${theme.colors.gray[2]} 100%)`,
             display: "flex",
             flexDirection: "column",
             minHeight: "100vh",
@@ -299,7 +290,7 @@ function AppLayout() {
               left: 0,
               right: 0,
               bottom: 0,
-              opacity: dark ? 0.03 : 0.04,
+              opacity: 0.04,
               backgroundImage: 'radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)',
               backgroundSize: "18px 18px",
               pointerEvents: "none",
@@ -316,20 +307,15 @@ function AppLayout() {
             <Header
               height={{ base: 56, md: 0 }}
               p="md"
-              sx={(theme) => ({
-                background:
-                  dark
-                    ? `linear-gradient(135deg, ${theme.colors.dark[7]} 0%, ${theme.colors.dark[8]} 100%)`
-                    : `linear-gradient(135deg, ${theme.white} 0%, ${theme.colors.gray[0]} 100%)`,
-                borderBottom: `1px solid ${
-                  dark ? theme.colors.dark[6] : theme.colors.gray[2]
-                }`,
-                boxShadow: dark
-                  ? `0 4px 12px ${theme.colors.dark[9]}50`
-                  : `0 4px 12px ${theme.colors.gray[3]}30`,
+              sx={{
+                background: 'linear-gradient(135deg, rgba(254, 246, 244, 0.95) 0%, rgba(235, 229, 239, 0.95) 100%)',
+                borderBottom: `1px solid rgba(156, 123, 172, 0.2)`,
+                boxShadow: '0 4px 12px rgba(156, 123, 172, 0.1)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '0 0 1rem 1rem',
                 zIndex: 200,
                 position: "relative",
-              })}
+              }}
             >
               <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
                 <Group spacing="xs">
@@ -339,13 +325,14 @@ function AppLayout() {
                     transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
                   >
                     <img
-                      src={theme.colorScheme === "dark" ? "/logo_white.png" : "/logo_black.png"}
+                      src="/own-logo.png"
                       alt="Logo"
                       style={{
                         height: 26,
                         width: "auto",
-                        filter: "drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3))",
+                        filter: "drop-shadow(0 2px 4px rgba(156, 123, 172, 0.3))",
                         transition: "all 0.3s ease",
+                        borderRadius: '0.5rem',
                       }}
                       className="logo-hover"
                     />
@@ -362,12 +349,13 @@ function AppLayout() {
                       to="/dashboard"
                       sx={(theme) => ({
                         textDecoration: "none",
-                        background: `linear-gradient(135deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[4]})`,
+                        background: `linear-gradient(135deg, ${theme.colors.violet[6]}, ${theme.colors.orange[5]})`,
                         backgroundClip: "text",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         fontWeight: 800,
                         letterSpacing: "-1px",
+                        fontFamily: 'Inter, system-ui, sans-serif',
                         display: "inline-block",
                         position: "relative",
                         padding: theme.spacing.xs,
@@ -375,7 +363,7 @@ function AppLayout() {
                         "&:hover": {
                           transform: "scale(1.02)",
                           cursor: "pointer",
-                          textShadow: "0 0 8px rgba(99, 179, 237, 0.3)",
+                          textShadow: "0 0 8px rgba(156, 123, 172, 0.3)",
                         },
                       })}
                     >
@@ -391,62 +379,13 @@ function AppLayout() {
                   >
                     <ActionIcon
                       variant="outline"
-                      color={dark ? "yellow" : "blue"}
-                      onClick={() => toggleColorScheme()}
-                      size="lg"
-                      radius="md"
-                      sx={{
-                        transition: "all 0.3s ease",
-                        "&:hover": {
-                          transform: "scale(1.05)",
-                          boxShadow: dark
-                            ? "0 0 15px rgba(255, 212, 59, 0.3)"
-                            : "0 0 15px rgba(34, 139, 230, 0.3)",
-                        },
-                      }}
-                      aria-label={t("colorSchemeToggleTitle", {
-                        ns: "app",
-                        defaultValue: "Toggle color scheme",
-                      })}
-                    >
-                      {dark ? (
-                        <motion.div
-                          key="sun"
-                          initial={{ rotate: -30, opacity: 0 }}
-                          animate={{ rotate: 0, opacity: 1 }}
-                          exit={{ rotate: 30, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <IconSun size={20} />
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="moon"
-                          initial={{ rotate: 30, opacity: 0 }}
-                          animate={{ rotate: 0, opacity: 1 }}
-                          exit={{ rotate: -30, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <IconMoonStars size={20} />
-                        </motion.div>
-                      )}
-                    </ActionIcon>
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <ActionIcon
-                      variant="outline"
                       onClick={() => setMobileMenuOpen((o) => !o)}
                       size="lg"
                       radius="md"
                       sx={{
                         transition: "all 0.3s ease",
                         "&:hover": {
-                          backgroundColor: dark
-                            ? theme.colors.dark[5]
-                            : theme.colors.gray[1],
+                          backgroundColor: theme.colors.gray[1],
                         },
                       }}
                       aria-label={t("burgerAriaLabel", {
@@ -476,21 +415,17 @@ function AppLayout() {
               sm: opened ? 250 : isMobile ? 0 : 80,
               lg: opened ? 300 : isMobile ? 0 : 80,
             }}
-            sx={(theme) => ({
-              background: dark
-                ? `linear-gradient(180deg, ${theme.colors.dark[7]} 0%, ${theme.colors.dark[8]} 100%)`
-                : `linear-gradient(180deg, ${theme.white} 0%, ${theme.colors.gray[0]} 100%)`,
-              borderRight: `1px solid ${
-                dark ? theme.colors.dark[5] : theme.colors.gray[2]
-              }`,
-              boxShadow: dark
-                ? `4px 0 12px ${theme.colors.dark[9]}30`
-                : `4px 0 12px ${theme.colors.gray[3]}20`,
+            sx={{
+              background: 'linear-gradient(180deg, rgba(254, 246, 244, 0.95) 0%, rgba(235, 229, 239, 0.95) 100%)',
+              borderRight: `1px solid rgba(156, 123, 172, 0.2)`,
+              boxShadow: '4px 0 12px rgba(156, 123, 172, 0.1)',
+              backdropFilter: 'blur(12px)',
+              borderRadius: '0 1rem 1rem 0',
               transition: "width 0.3s ease, padding 0.3s ease",
               display: isMobile ? "none" : "flex",
               flexDirection: "column",
               zIndex: 150,
-            })}
+            }}
           >
             {/* Header section with logo, app name, and toggle */}
             <Box
@@ -500,20 +435,14 @@ function AppLayout() {
                 justifyContent: opened ? "space-between" : "center",
                 marginBottom: theme.spacing.md,
                 paddingBottom: theme.spacing.md,
-                borderBottom: `1px solid ${
-                  dark ? theme.colors.dark[5] : theme.colors.gray[2]
-                }`,
+                borderBottom: `1px solid ${theme.colors.gray[2]}`,
                 minHeight: 60,
               }}
             >
               {opened && (
                 <Group spacing="xs">
                   <img
-                    src={
-                      theme.colorScheme === "dark"
-                        ? "/logo_white.png"
-                        : "/logo_black.png"
-                    }
+                    src="/own-logo.png"
                     alt="Logo"
                     style={{
                       height: 28,
@@ -602,14 +531,10 @@ function AppLayout() {
                   background: "transparent",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: dark
-                    ? theme.colors.dark[6]
-                    : theme.colors.gray[4],
+                  backgroundColor: theme.colors.gray[4],
                   borderRadius: "3px",
                   "&:hover": {
-                    backgroundColor: dark
-                      ? theme.colors.dark[5]
-                      : theme.colors.gray[5],
+                    backgroundColor: theme.colors.gray[5],
                   },
                 },
                 paddingRight: "4px",
@@ -629,9 +554,7 @@ function AppLayout() {
             <Box
               sx={{
                 paddingTop: theme.spacing.md,
-                borderTop: `1px solid ${
-                  dark ? theme.colors.dark[5] : theme.colors.gray[2]
-                }`,
+                borderTop: `1px solid ${theme.colors.gray[2]}`,
                 position: "sticky",
                 bottom: 0,
                 zIndex: 100,
@@ -708,35 +631,11 @@ function AppLayout() {
                   </Menu.Target>
                   <Menu.Dropdown
                     sx={{
-                      border: `1px solid ${
-                        dark ? theme.colors.dark[4] : theme.colors.gray[3]
-                      }`,
-                      boxShadow: dark
-                        ? `0 8px 24px ${theme.colors.dark[9]}70`
-                        : `0 8px 24px ${theme.colors.gray[4]}40`,
+                      border: `1px solid ${theme.colors.gray[3]}`,
+                      boxShadow: `0 8px 24px ${theme.colors.gray[4]}40`,
                       zIndex: 300,
                     }}
                   >
-                    <Menu.Item
-                      icon={
-                        dark ? (
-                          <IconSun size={14} />
-                        ) : (
-                          <IconMoonStars size={14} />
-                        )
-                      }
-                      onClick={() => toggleColorScheme()}
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: dark
-                            ? theme.colors.dark[6]
-                            : theme.colors.gray[1],
-                        },
-                      }}
-                    >
-                      {t("theme", { ns: "app" })}
-                    </Menu.Item>
-
                     <Menu.Item
                       icon={<IconInfoCircle size={14} />}
                       onClick={() => {
@@ -744,9 +643,7 @@ function AppLayout() {
                       }}
                       sx={{
                         "&:hover": {
-                          backgroundColor: dark
-                            ? theme.colors.dark[6]
-                            : theme.colors.gray[1],
+                          backgroundColor: theme.colors.gray[1],
                         },
                       }}
                     >
@@ -812,28 +709,11 @@ function AppLayout() {
                     </Menu.Target>
                     <Menu.Dropdown
                       sx={{
-                        border: `1px solid ${
-                          dark ? theme.colors.dark[4] : theme.colors.gray[3]
-                        }`,
-                        boxShadow: dark
-                          ? `0 8px 24px ${theme.colors.dark[9]}70`
-                          : `0 8px 24px ${theme.colors.gray[4]}40`,
+                        border: `1px solid ${theme.colors.gray[3]}`,
+                        boxShadow: `0 8px 24px ${theme.colors.gray[4]}40`,
                         zIndex: 300,
                       }}
                     >
-                      <Menu.Item
-                        icon={
-                          dark ? (
-                            <IconSun size={14} />
-                          ) : (
-                            <IconMoonStars size={14} />
-                          )
-                        }
-                        onClick={() => toggleColorScheme()}
-                      >
-                        {t("theme", { ns: "app" })}
-                      </Menu.Item>
-                      <Divider />
                       <Menu.Item
                         icon={<IconLogout size={14} />}
                         onClick={handleLogout}
@@ -918,10 +798,10 @@ function AppLayout() {
                 marginBottom: 8,
               },
               '&::-webkit-scrollbar-thumb': {
-                backgroundColor: dark ? theme.colors.dark[5] : theme.colors.gray[4],
+                backgroundColor: theme.colors.gray[4],
                 borderRadius: 3,
                 '&:hover': {
-                  backgroundColor: dark ? theme.colors.dark[4] : theme.colors.gray[5],
+                  backgroundColor: theme.colors.gray[5],
                 },
               },
             }}>
@@ -960,7 +840,7 @@ function AppLayout() {
       {/* Mobile Bottom Navigation */}
       {isMobile && (
         <Paper
-          shadow={dark ? "xl" : "sm"}
+          shadow="sm"
           radius={0}
           withBorder
           sx={{
@@ -969,8 +849,8 @@ function AppLayout() {
             left: 0,
             right: 0,
             zIndex: 999,
-            borderTop: `1px solid ${dark ? theme.colors.dark[5] : theme.colors.gray[3]}`,
-            background: dark ? theme.colors.dark[7] : theme.white,
+            borderTop: `1px solid ${theme.colors.gray[3]}`,
+            background: theme.white,
           }}
         >
           <Group position="apart" px="md" py="xs">
@@ -991,9 +871,7 @@ function AppLayout() {
                     borderRadius: 8,
                     color: active
                       ? theme.colors.blue[6]
-                      : dark
-                        ? theme.colors.dark[0]
-                        : theme.colors.gray[7],
+                      : theme.colors.gray[7],
                   }}
                 >
                   <Stack spacing={2} align="center">
@@ -1018,7 +896,7 @@ function AppLayout() {
               sx={{
                 padding: bottomPadding,
                 borderRadius: 8,
-                color: dark ? theme.colors.dark[0] : theme.colors.gray[7],
+                color: theme.colors.gray[7],
               }}
             >
               <Stack spacing={2} align="center">

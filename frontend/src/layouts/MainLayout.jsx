@@ -11,7 +11,6 @@ import {
   Button,
   Avatar,
   Menu,
-  useMantineColorScheme,
   Badge,
   Divider,
   UnstyledButton,
@@ -38,11 +37,9 @@ function MainLayout() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth(); // Ensure isAuthenticated is destructured
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { t } = useTranslation(['app', 'navigation', 'common']); // Initialize translation hook for app, navigation, and common namespaces
   // Search functionality moved to SearchBar component
   const { pathname } = useLocation();
-  const dark = colorScheme === 'dark';
   const isMobile = useMediaQuery('(max-width: 768px)'); // Add mobile detection
 
   // Logic to determine avatar source
@@ -64,7 +61,7 @@ function MainLayout() {
       <AppShell
       styles={{
         main: {
-          background: dark ? theme.colors.dark[8] : theme.colors.gray[0],
+          background: theme.colors.gray[0],
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
@@ -80,13 +77,9 @@ function MainLayout() {
           height={{ base: 60, md: 70 }} 
           p="md"
           sx={(theme) => ({
-            background: dark 
-              ? `linear-gradient(135deg, ${theme.colors.dark[7]} 0%, ${theme.colors.dark[8]} 100%)`
-              : `linear-gradient(135deg, ${theme.white} 0%, ${theme.colors.gray[0]} 100%)`,
-            borderBottom: `1px solid ${dark ? theme.colors.dark[6] : theme.colors.gray[2]}`,
-            boxShadow: dark 
-              ? `0 4px 12px ${theme.colors.dark[9]}50`
-              : `0 4px 12px ${theme.colors.gray[3]}30`,
+            background: `linear-gradient(135deg, ${theme.white} 0%, ${theme.colors.gray[0]} 100%)`,
+            borderBottom: `1px solid ${theme.colors.gray[2]}`,
+            boxShadow: `0 4px 12px ${theme.colors.gray[3]}30`,
             zIndex: 200,
             position: 'relative',
           })}
@@ -95,7 +88,7 @@ function MainLayout() {
             <Group spacing="xs">
               {(!isMobile || isAuthenticated) && (
                 <img 
-                  src={theme.colorScheme === 'dark' ? "/logo_white.png" : "/logo_black.png"}
+                  src="/own-logo.png"
                   alt="Logo"
                   style={{ 
                     height: 28,
@@ -154,26 +147,6 @@ function MainLayout() {
             <Box sx={{ flexGrow: 1, '@media (min-width: 769px)': { display: 'none' } }} />
             
             <Group spacing="md">
-              {(!isMobile || isAuthenticated) && (
-                <ActionIcon
-                  variant="outline"
-                  color={dark ? 'yellow' : 'blue'}
-                  onClick={() => toggleColorScheme()}
-                  title={t('colorSchemeToggleTitle', { ns: 'app', defaultValue: 'Toggle color scheme' })}
-                  size="lg"
-                  radius="md"
-                  sx={{
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                    },
-                    display: isMobile && !isAuthenticated ? 'none' : 'flex',
-                  }}
-                >
-                  {dark ? <IconSun size={20} /> : <IconMoonStars size={20} />}
-                </ActionIcon>
-              )}
-              
               {isAuthenticated && user ? (
                 <Menu shadow="md" width={220} withinPortal={true} zIndex={300}>
                   <Menu.Target>
@@ -183,7 +156,7 @@ function MainLayout() {
                         borderRadius: theme.radius.md,
                         transition: 'all 0.2s ease',
                         '&:hover': {
-                          backgroundColor: dark ? theme.colors.dark[6] : theme.colors.gray[1],
+                          backgroundColor: theme.colors.gray[1],
                           transform: 'scale(1.02)',
                         },
                       }}
@@ -223,10 +196,8 @@ function MainLayout() {
                   </Menu.Target>
                   <Menu.Dropdown
                     sx={{
-                      border: `1px solid ${dark ? theme.colors.dark[4] : theme.colors.gray[3]}`,
-                      boxShadow: dark 
-                        ? `0 8px 24px ${theme.colors.dark[9]}70`
-                        : `0 8px 24px ${theme.colors.gray[4]}40`,
+                      border: `1px solid ${theme.colors.gray[3]}`,
+                      boxShadow: `0 8px 24px ${theme.colors.gray[4]}40`,
                       zIndex: 300,
                     }}
                   >
@@ -235,24 +206,12 @@ function MainLayout() {
                       onClick={() => navigate('/dashboard')}
                       sx={{
                         '&:hover': {
-                          backgroundColor: dark ? theme.colors.dark[6] : theme.colors.gray[1],
+                          backgroundColor: theme.colors.gray[1],
                         },
                       }}
                     >
                       {t('dashboard', { ns: 'navigation' })}
                     </Menu.Item>
-                    {/*<Menu.Item 
-                      icon={<IconChartLine size={14} />} 
-                      onClick={() => navigate('/dashboard/statistics')}
-                      sx={{
-                        '&:hover': {
-                          backgroundColor: dark ? theme.colors.dark[6] : theme.colors.gray[1],
-                        },
-                      }}
-                    >
-                      {t('statistics', { ns: 'navigation' })}
-                    </Menu.Item>
-                    */}
                     <Divider />
                     <Menu.Item 
                       icon={<IconLogout size={14} />} 

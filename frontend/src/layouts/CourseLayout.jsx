@@ -9,7 +9,6 @@ import {
   Box,
   Menu,
   Avatar,
-  useMantineColorScheme,
   useMantineTheme,
   Divider,
   UnstyledButton,
@@ -45,9 +44,7 @@ function CourseLayout() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { t } = useTranslation(['navigation', 'app']);
-  const dark = colorScheme === 'dark';
   const { chapters, loading } = useCourse();
 
   // Sidebar is closed by default
@@ -191,13 +188,6 @@ function CourseLayout() {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item
-                  icon={dark ? <IconSun size={14} /> : <IconMoonStars size={14} />}
-                  onClick={() => toggleColorScheme()}
-                >
-                  {t('theme', { ns: 'app' })}
-                </Menu.Item>
-                <Divider />
-                <Menu.Item
                   icon={<IconLogout size={14} />}
                   onClick={handleLogout}
                   color="red"
@@ -219,7 +209,7 @@ function CourseLayout() {
       navbarOffsetBreakpoint="xs" // offset at *all* widths
       styles={{
         main: {
-          background: dark ? theme.colors.dark[8] : theme.colors.gray[0],
+          background: theme.colors.gray[0],
           padding: '1rem'
         }
       }}
@@ -241,11 +231,11 @@ function CourseLayout() {
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
             borderRadius: '0 20px 20px 0',
-            border: `1px solid ${dark ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+            border: `1px solid ${theme.colors.gray[3]}`,
             borderLeft: 0,
-            backgroundColor: dark ? theme.colors.dark[6] : theme.white,
+            backgroundColor: theme.white,
             '&:hover': {
-              backgroundColor: dark ? theme.colors.dark[5] : theme.colors.gray[1]
+              backgroundColor: theme.colors.gray[1]
             }
           })}
         >
@@ -261,16 +251,16 @@ function CourseLayout() {
           display: block;
           padding: 8px 12px;
           border-radius: ${theme.radius.sm};
-          color: ${dark ? theme.colors.dark[0] : theme.black};
+          color: ${theme.black};
           text-decoration: none;
           transition: background-color 150ms ease;
         }
         .chapter-nav-link:hover {
-          background-color: ${dark ? theme.colors.dark[5] : theme.colors.gray[1]};
+          background-color: ${theme.colors.gray[1]};
         }
         .chapter-nav-link.active {
-          background-color: ${dark ? theme.colors.blue[8] : theme.colors.blue[0]};
-          color: ${dark ? 'white' : theme.colors.blue[7]};
+          background-color: ${theme.colors.blue[0]};
+          color: ${theme.colors.blue[7]};
         }
         .sub-nav-link {
           display: block;
@@ -281,10 +271,10 @@ function CourseLayout() {
           transition: background-color 150ms ease;
         }
         .sub-nav-link:hover {
-          background-color: ${dark ? theme.colors.dark[6] : theme.colors.gray[0]};
+          background-color: ${theme.colors.gray[0]};
         }
         .sub-nav-link.active {
-          color: ${dark ? theme.white : theme.black};
+          color: ${theme.black};
         }
       `}</style>
     </AppShell>
