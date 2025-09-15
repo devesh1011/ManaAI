@@ -35,15 +35,15 @@ function TestComponent() {
   const complexityData = generateData(inputSize);
 
   // Generate 3D surface data for Plotly
-  const generate3DData = () => {
-    const x = [], y = [], z = [];
-    for (let i = 1; i <= 20; i++) {
-      x.push(i);
-      y.push(i);
-      z.push(i * i); // O(n²) for demonstration
-    }
-    return { x, y, z };
-  };
+  // const generate3DData = () => {
+  //   const x = [], y = [], z = [];
+  //   for (let i = 1; i <= 20; i++) {
+  //     x.push(i);
+  //     y.push(i);
+  //     z.push(i * i); // O(n²) for demonstration
+  //   }
+  //   return { x, y, z };
+  // };
 
   const complexityInfo = {
     constant: { color: '#8884d8', name: 'O(1)', description: 'Constant time' },
@@ -105,7 +105,7 @@ function TestComponent() {
   const currentFlow = algorithmFlows[selectedAlgorithm];
 
   // 3D plot data
-  const plotData = generate3DData();
+  // const plotData = generate3DData();
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">

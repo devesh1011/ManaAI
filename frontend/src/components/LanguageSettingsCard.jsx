@@ -41,13 +41,11 @@ function LanguageSettingsCard({ className }) {
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder className={className}>
-      <Card.Section p="md" bg={theme.colorScheme === 'dark' ? 
-        theme.fn.rgba(theme.colors.violet[9], 0.2) : 
-        theme.colors.violet[0]}>
+      <Card.Section p="md" bg={theme.colors.violet[0]}>
         <Group position="apart">
           <Group spacing="xs">
             <IconLanguage size={24} stroke={1.5} 
-              color={theme.colors.violet[theme.colorScheme === 'dark' ? 4 : 6]} />
+              color={theme.colors.violet[6]} />
             <Title order={3}>{t('languageSettings', { ns: 'settings' })}</Title>
           </Group>
           <Badge color="violet" variant="light">{t('preferences', { ns: 'settings' })}</Badge>

@@ -87,7 +87,7 @@ const SearchBar = () => {
       default:
         break;
     }
-  }, [isDropdownOpen, searchResults, activeIndex, searchQuery, closeDropdown]);
+  }, [isDropdownOpen, searchResults, activeIndex, searchQuery, closeDropdown, handleResultClick]);
   
   // Set up keyboard event listener
   useEffect(() => {

@@ -31,7 +31,7 @@ const FullscreenContentWrapper = ({ children }) => {
         width: isFullscreen ? '100vw' : '100%',
         height: isFullscreen ? '100vh' : 'auto',
         zIndex: isFullscreen ? 9999 : 'auto',
-        backgroundColor: isFullscreen ? (theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white) : 'transparent',
+        backgroundColor: isFullscreen ? theme.white : 'transparent',
         overflow: isFullscreen ? 'auto' : 'visible',
         transition: 'all 0.3s ease',
       })}
@@ -54,7 +54,7 @@ const FullscreenContentWrapper = ({ children }) => {
             transform: 'scale(1.1)',
           },
           boxShadow: theme.shadows.md,
-          border: `2px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
+          border: `2px solid ${theme.colors.gray[2]}`,
         })}
         title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
       >

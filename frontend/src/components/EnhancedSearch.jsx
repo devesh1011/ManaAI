@@ -77,7 +77,7 @@ function EnhancedSearch({ courses, onSearchResultClick }) {
             padding: '10px 16px',
             height: 'auto',
             fontSize: '0.95rem',
-            borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[3],
+            borderColor: theme.colors.gray[3],
             '&:focus': {
               borderColor: theme.colors.blue[5],
               boxShadow: `0 0 0 1px ${theme.colors.blue[5]}`,
@@ -98,7 +98,7 @@ function EnhancedSearch({ courses, onSearchResultClick }) {
             marginTop: 4,
             maxHeight: '400px',
             overflowY: 'auto',
-            border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[2]}`,
+            border: `1px solid ${theme.colors.gray[2]}`,
             borderRadius: theme.radius.md,
           }}
         >
@@ -108,15 +108,15 @@ function EnhancedSearch({ courses, onSearchResultClick }) {
             </Box>
           ) : results.length > 0 ? (
             <div>
-              {results.map((result, index) => (
+              {results.map((result) => (
                 <Box
                   key={`${result.type}-${result.id}`}
                   p="sm"
                   style={{
-                    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]}`,
+                    borderBottom: `1px solid ${theme.colors.gray[2]}`,
                     cursor: 'pointer',
                     '&:hover': {
-                      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+                      backgroundColor: theme.colors.gray[0],
                     },
                   }}
                   onMouseDown={(e) => {

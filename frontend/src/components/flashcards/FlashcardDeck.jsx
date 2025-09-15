@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Paper,
   Text,
@@ -27,10 +27,9 @@ import {
   IconTrophy,
   IconBrain
 } from '@tabler/icons-react';
-import { useTranslation } from 'react-i18next';
 
-const FlashcardDeck = ({ courseId, chapterId }) => {
-  const { t } = useTranslation('flashcards');
+const FlashcardDeck = () => {
+  // const { t } = useTranslation('flashcards');
   
   // Mock data - will be replaced with API calls later
   const [flashcards] = useState([
@@ -69,7 +68,7 @@ const FlashcardDeck = ({ courseId, chapterId }) => {
     total: 0
   });
   const [sessionStarted, setSessionStarted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [showResults, setShowResults] = useState(false);
 
   const currentCard = flashcards[currentCardIndex];

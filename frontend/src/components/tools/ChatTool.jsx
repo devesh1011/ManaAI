@@ -227,7 +227,7 @@ function ChatTool({ isOpen, courseId, chapterId }) {
 
   return (
     <div style={{...getToolContainerStyle(isOpen, theme), display: 'flex', flexDirection: 'column', height: '100%', padding: 0, margin: 0, width: '100%' }}>
-      <Group position="apart" sx={{ padding: '0.5rem 1rem', borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}` }}>
+      <Group position="apart" sx={{ padding: '0.5rem 1rem', borderBottom: `1px solid ${theme.colors.gray[2]}` }}>
         <Text weight={500}>{t('title')}</Text>
         <Tooltip label={t('newChat')} withArrow>
           <ActionIcon onClick={handleNewChat} size="sm">
@@ -253,8 +253,8 @@ function ChatTool({ isOpen, courseId, chapterId }) {
                   padding: '0.5rem 1rem',
                   borderRadius: theme.radius.lg,
                   backgroundColor: message.sender === 'user' 
-                    ? (theme.colorScheme === 'dark' ? theme.colors.blue[8] : theme.colors.blue[0])
-                    : (theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]),
+                    ? theme.colors.blue[0]
+                    : theme.colors.gray[1],
                   color: message.isError ? theme.colors.red[5] : 'inherit',
                   border: message.isError ? `1px solid ${theme.colors.red[5]}` : 'none',
                 })}
@@ -354,7 +354,7 @@ function ChatTool({ isOpen, courseId, chapterId }) {
         </Stack>
       </Box>
 
-      <form onSubmit={handleSendMessage} style={{ padding: '0.5rem 1rem', borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}` }}>
+      <form onSubmit={handleSendMessage} style={{ padding: '0.5rem 1rem', borderTop: `1px solid ${theme.colors.gray[2]}` }}>
         <Group spacing="xs" align="flex-end">
           <Textarea
             ref={textareaRef}

@@ -23,9 +23,7 @@ function AppFooter() {
         alignItems: 'center',
         padding: theme.spacing.md,
         marginTop: 'auto',
-        borderTop: `1px solid ${
-          theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-        }`,
+        borderTop: `1px solid ${theme.colors.gray[3]}`,
       })}
     >
       {!isAuthenticated && (

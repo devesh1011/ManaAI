@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Text, Textarea, Button, Alert, Badge, Group, Radio, Paper } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 const QuizPanel = ({
   questions = [],

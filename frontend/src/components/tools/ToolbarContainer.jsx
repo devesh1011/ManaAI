@@ -84,8 +84,8 @@ function ToolbarContainer({ courseId, chapterId }) {
         zIndex: isMobile ? 900 : 1000,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
-        borderLeft: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[3]}`, 
+        backgroundColor: theme.white,
+        borderLeft: `1px solid ${theme.colors.gray[3]}`, 
       }}
     >
       <Box
@@ -94,7 +94,7 @@ function ToolbarContainer({ courseId, chapterId }) {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '10px',
-          borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[3]}`, 
+          borderBottom: `1px solid ${theme.colors.gray[3]}`, 
         }}
       >
         <Tabs value={activeTab} onTabChange={handleTabChange} variant="pills">
@@ -117,7 +117,7 @@ function ToolbarContainer({ courseId, chapterId }) {
         paddingBottom: isMobile ? '80px' : 0,
 
         scrollbarWidth: 'thin',
-        scrollbarColor: `${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[4]} transparent`,
+        scrollbarColor: `${theme.colors.gray[4]} transparent`,
         '&::-webkit-scrollbar': {
           width: '8px',
         },
@@ -125,7 +125,7 @@ function ToolbarContainer({ courseId, chapterId }) {
           background: 'transparent',
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[4],
+          backgroundColor: theme.colors.gray[4],
           borderRadius: '4px',
         },
       }}>

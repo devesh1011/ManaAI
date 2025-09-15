@@ -15,14 +15,12 @@ import {
   } from '@mantine/core';
   import { IconRocket, IconCheck } from '@tabler/icons-react';
   import { useTranslation } from 'react-i18next';
-  // Import framer-motion for animations
-  import { motion } from 'framer-motion';
   
   // --- Styling Hook (Mantine's recommended way for custom styles) ---
   const useStyles = createStyles((theme) => ({
     modalContent: {
       // Adding a subtle background texture or color can make a big difference
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+      backgroundColor: theme.colors.gray[0],
     },
   
     header: {
@@ -47,9 +45,7 @@ import {
       padding: `calc(${theme.spacing.xl} * 1.5)`,
       borderRadius: theme.radius.lg,
       boxShadow: theme.shadows.md,
-      border: `1px solid ${
-        theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
-      }`,
+      border: `1px solid ${theme.colors.gray[2]}`,
     },
     
     upgradeButton: {

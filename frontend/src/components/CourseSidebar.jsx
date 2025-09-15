@@ -52,7 +52,7 @@ const ChapterLink = ({ chapter, index, handleChapterClick, handleNavigation, cha
   // When expanded, render full navigation structure
   return (
     <div style={{
-      backgroundColor: chapterId === chapter.id.toString() ? (theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[1]) : undefined,
+      backgroundColor: chapterId === chapter.id.toString() ? theme.colors.gray[1] : undefined,
     }}>
     <NavLink
       key={chapter.id}
@@ -60,7 +60,7 @@ const ChapterLink = ({ chapter, index, handleChapterClick, handleNavigation, cha
       opened={isExpanded}
       onClick={() => handleChapterClick(chapter.id.toString())}
       style={{
-        backgroundColor: chapterId === chapter.id.toString() ? (theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[1]) : undefined,
+        backgroundColor: chapterId === chapter.id.toString() ? theme.colors.gray[1] : undefined,
       }}
       icon={
         <ThemeIcon variant="light" size="sm" color={chapter.is_completed ? 'green' : 'gray'}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Group, Paper, Text, ThemeIcon, useMantineTheme } from '@mantine/core';
+import { Group, Paper, Text, ThemeIcon } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconFlame, IconBook, IconClock } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
@@ -46,9 +46,7 @@ function DashboardStats({ stats, theme }) {
               color={stat.color}
               sx={{
                 minWidth: 48,
-                background: theme.colorScheme === 'dark' 
-                  ? `${theme.colors[stat.color][9]}22`
-                  : `${theme.colors[stat.color][0]}`, 
+                background: `${theme.colors[stat.color][0]}`, 
               }}
             >
               {stat.icon}
