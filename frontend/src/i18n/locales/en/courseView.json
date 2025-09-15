@@ -37,7 +37,8 @@
     "startLearning": "Start Learning",
     "continueLearning": "Continue Learning",
     "reviewChapter": "Review Chapter",
-    "startChapter": "Start Chapter"
+    "startChapter": "Start Chapter",
+    "refreshIfStuck": "Refresh if Stuck"
   },
   "progress": {
     "percentageComplete": "{{percentage}}% Complete",

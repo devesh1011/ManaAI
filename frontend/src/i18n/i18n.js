@@ -34,7 +34,7 @@ i18nInstance
     fallbackLng: "en",
 
     // Enable debug in development
-    debug: process.env.NODE_ENV === "development",
+    debug: import.meta.env.DEV,
 
     // Use dot notation for nested keys
     keySeparator: ".",
