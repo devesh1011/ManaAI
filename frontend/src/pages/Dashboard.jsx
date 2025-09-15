@@ -57,6 +57,10 @@ const useStyles = createStyles((theme) => ({
     width: '100%',
     '& .mantine-Card-root': {
       overflow: 'visible',
+      borderRadius: '1.25rem',
+      background: 'linear-gradient(135deg, rgba(156, 123, 172, 0.1) 0%, rgba(156, 123, 172, 0.05) 100%)',
+      boxShadow: '0 4px 12px rgba(156, 123, 172, 0.1)',
+      border: `1px solid rgba(156, 123, 172, 0.2)`,
     },
   },
   continueCard: {
@@ -129,7 +133,7 @@ const useStyles = createStyles((theme) => ({
   sectionTitle: {
     marginBottom: theme.spacing.md,
     paddingBottom: theme.spacing.xs,
-    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[3]}`,
+    borderBottom: `1px solid rgba(156, 123, 172, 0.2)`,
   },
   courseDescription: {
     flex: 1,
@@ -213,14 +217,44 @@ function Dashboard() {
   // Show limited courses unless "View All" is clicked
   const displayedCourses = viewAllCourses ? courses : courses.slice(0, 3);
 
+  const [courseChapters, setCourseChapters] = useState({});
+
   // Function to calculate progress for a course
   const calculateProgress = (course) => {
     if (course.status === 'finished') return 100;
     if (course.status === 'creating') return 0;
     
-    return (course && course.chapter_count && course.chapter_count > 0)
+    // If we have fresh chapter data, use it for accurate progress calculation
+    const chapters = courseChapters[course.course_id];
+    if (chapters) {
+      const completedCount = chapters.filter(ch => ch.is_completed).length;
+      const totalCount = chapters.length;
+      const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+      
+      console.log('Dashboard Progress (using fresh chapter data):', {
+        courseId: course.course_id,
+        completedCount,
+        totalCount,
+        calculatedProgress: progress
+      });
+      
+      return progress;
+    }
+    
+    // Fallback to course data (may be stale)
+    const progress = (course && course.chapter_count && course.chapter_count > 0)
       ? Math.round((100 * (course.completed_chapter_count || 0) / course.chapter_count))
       : 0;
+    
+    console.log('Dashboard Progress (using course data):', {
+      courseId: course.course_id,
+      status: course.status,
+      completed_chapter_count: course.completed_chapter_count,
+      chapter_count: course.chapter_count,
+      calculatedProgress: progress
+    });
+    
+    return progress;
   };
 
 
@@ -300,6 +334,20 @@ function Dashboard() {
         const coursesData = await courseService.getUserCourses();
         setCourses(coursesData);
         setError(null);
+        
+        // Fetch chapters for the first course to get accurate progress
+        if (coursesData.length > 0) {
+          try {
+            const firstCourse = coursesData[0];
+            const chapters = await courseService.getCourseChapters(firstCourse.course_id);
+            setCourseChapters(prev => ({
+              ...prev,
+              [firstCourse.course_id]: chapters
+            }));
+          } catch (chapterError) {
+            console.error('Error fetching chapters for progress calculation:', chapterError);
+          }
+        }
       } catch (error) {
         setError(t('loadCoursesError'));
         console.error('Error fetching courses:', error);
@@ -573,9 +621,7 @@ function Dashboard() {
               onClick={() => navigate('/dashboard/create-course')}
               leftIcon={<IconPlus size={20} />}
               sx={(theme) => ({
-                background: theme.colorScheme === 'dark'
-                  ? `linear-gradient(45deg, ${theme.colors.teal[9]}, ${theme.colors.cyan[7]})`
-                  : `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[4]})`,
+                background: `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[4]})`,
                 transition: 'transform 0.2s ease',
                 '&:hover': {
                   transform: 'translateY(-3px)',
@@ -755,7 +801,7 @@ function Dashboard() {
                 p="xl" 
                 withBorder 
                 sx={{
-                  background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+                  background: theme.colors.gray[0],
                   textAlign: 'center',
                 }}
               >

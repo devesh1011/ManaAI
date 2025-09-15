@@ -15,7 +15,6 @@ import {
   Title,
   ThemeIcon,
   useMantineTheme,
-  useMantineColorScheme,
   Transition,
   Progress,
   Stack,
@@ -40,15 +39,12 @@ import Latex from 'react-latex-next';
 
 const useStyles = createStyles((theme) => ({
   quizContainer: {
-    background: theme.colorScheme === 'dark' 
-      ? `linear-gradient(135deg, ${theme.colors.dark[8]} 0%, ${theme.colors.dark[7]} 100%)`
-      : `linear-gradient(135deg, ${theme.colors.gray[0]} 0%, ${theme.white} 100%)`,
-    borderRadius: theme.radius.lg,
+    background: 'linear-gradient(135deg, rgba(254, 246, 244, 0.95) 0%, rgba(235, 229, 239, 0.95) 100%)',
+    borderRadius: '1.25rem',
     padding: theme.spacing.xl,
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[2]}`,
-    boxShadow: theme.colorScheme === 'dark' 
-      ? `0 8px 32px ${theme.colors.dark[9]}60`
-      : `0 8px 32px ${theme.colors.gray[4]}30`,
+    border: `1px solid rgba(156, 123, 172, 0.2)`,
+    boxShadow: '0 8px 32px rgba(156, 123, 172, 0.12)',
+    backdropFilter: 'blur(12px)',
     position: 'relative',
     overflow: 'hidden',
     '&::before': {
@@ -58,16 +54,14 @@ const useStyles = createStyles((theme) => ({
       left: 0,
       right: 0,
       height: 4,
-      background: `linear-gradient(90deg, ${theme.colors.violet[6]}, ${theme.colors.blue[5]}, ${theme.colors.cyan[5]})`,
-      borderRadius: `${theme.radius.lg}px ${theme.radius.lg}px 0 0`,
+      background: `linear-gradient(90deg, ${theme.colors.violet[6]}, ${theme.colors.orange[5]})`,
+      borderRadius: '1.25rem 1.25rem 0 0',
     },
   },
   
   questionCard: {
-    background: theme.colorScheme === 'dark' 
-      ? `linear-gradient(145deg, ${theme.colors.dark[6]} 0%, ${theme.colors.dark[7]} 100%)`
-      : `linear-gradient(145deg, ${theme.white} 0%, ${theme.colors.gray[0]} 100%)`,
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]}`,
+    background: `linear-gradient(145deg, ${theme.white} 0%, ${theme.colors.gray[0]} 100%)`,
+    border: `1px solid ${theme.colors.gray[2]}`,
     borderRadius: theme.radius.md,
     padding: theme.spacing.xl,
     marginBottom: theme.spacing.lg,
@@ -77,9 +71,7 @@ const useStyles = createStyles((theme) => ({
     
     '&:hover': {
       transform: 'translateY(-2px)',
-      boxShadow: theme.colorScheme === 'dark' 
-        ? `0 12px 32px ${theme.colors.dark[9]}80`
-        : `0 12px 32px ${theme.colors.gray[4]}40`,
+      boxShadow: `0 12px 32px ${theme.colors.gray[4]}40`,
       border: `1px solid ${theme.colors.violet[6]}40`,
     },
     
@@ -101,13 +93,11 @@ const useStyles = createStyles((theme) => ({
   },
   
   questionHeader: {
-    background: theme.colorScheme === 'dark' 
-      ? `linear-gradient(135deg, ${theme.colors.violet[9]}20, ${theme.colors.blue[9]}20)`
-      : `linear-gradient(135deg, ${theme.colors.violet[1]}, ${theme.colors.blue[1]})`,
+    background: `linear-gradient(135deg, ${theme.colors.violet[1]}, ${theme.colors.blue[1]})`,
     borderRadius: theme.radius.md,
     padding: theme.spacing.md,
     marginBottom: theme.spacing.lg,
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.violet[8] : theme.colors.violet[3]}30 : ${theme.colors.violet[3]}50`,
+    border: `1px solid ${theme.colors.violet[3]}50`,
   },
   
   pointsBadge: {
@@ -133,11 +123,9 @@ const useStyles = createStyles((theme) => ({
   },
   
   typeBadge: {
-    background: theme.colorScheme === 'dark' 
-      ? `linear-gradient(135deg, ${theme.colors.dark[5]}, ${theme.colors.dark[4]})`
-      : `linear-gradient(135deg, ${theme.colors.gray[1]}, ${theme.colors.gray[0]})`,
-    color: theme.colorScheme === 'dark' ? theme.colors.gray[3] : theme.colors.gray[7],
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+    background: `linear-gradient(135deg, ${theme.colors.gray[1]}, ${theme.colors.gray[0]})`,
+    color: theme.colors.gray[7],
+    border: `1px solid ${theme.colors.gray[3]}`,
     fontWeight: 500,
     '&[data-type="MC"]': {
       background: `linear-gradient(135deg, ${theme.colors.blue[6]}20, ${theme.colors.cyan[5]}20)`,
@@ -154,23 +142,19 @@ const useStyles = createStyles((theme) => ({
   radioOption: {
     padding: theme.spacing.md,
     borderRadius: theme.radius.md,
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[3]}`,
+    border: `1px solid ${theme.colors.gray[3]}`,
     marginBottom: theme.spacing.sm,
     transition: 'all 0.2s ease',
-    background: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
+    background: theme.white,
     
     '&:hover': {
-      background: theme.colorScheme === 'dark' 
-        ? theme.colors.dark[5] 
-        : theme.colors.gray[0],
+      background: theme.colors.gray[0],
       border: `1px solid ${theme.colors.violet[6]}50`,
       transform: 'translateX(4px)',
     },
     
     '&[data-selected="true"]': {
-      background: theme.colorScheme === 'dark' 
-        ? `linear-gradient(135deg, ${theme.colors.violet[9]}30, ${theme.colors.blue[9]}30)`
-        : `linear-gradient(135deg, ${theme.colors.violet[1]}, ${theme.colors.blue[1]})`,
+      background: `linear-gradient(135deg, ${theme.colors.violet[1]}, ${theme.colors.blue[1]})`,
       border: `1px solid ${theme.colors.violet[6]}`,
       transform: 'translateX(8px)',
     },
@@ -192,7 +176,7 @@ const useStyles = createStyles((theme) => ({
     },
     
     '&:disabled': {
-      background: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[3],
+      background: theme.colors.gray[3],
       transform: 'none',
       boxShadow: 'none',
     },
@@ -206,54 +190,42 @@ const useStyles = createStyles((theme) => ({
     overflow: 'hidden',
     
     '&[data-color="green"]': {
-      background: theme.colorScheme === 'dark' 
-        ? `linear-gradient(135deg, ${theme.colors.green[9]}30, ${theme.colors.teal[9]}30)`
-        : `linear-gradient(135deg, ${theme.colors.green[1]}, ${theme.colors.teal[1]})`,
-      color: theme.colorScheme === 'dark' ? theme.colors.green[3] : theme.colors.green[8],
+      background: `linear-gradient(135deg, ${theme.colors.green[1]}, ${theme.colors.teal[1]})`,
+      color: theme.colors.green[8],
     },
     
     '&[data-color="yellow"]': {
-      background: theme.colorScheme === 'dark' 
-        ? `linear-gradient(135deg, ${theme.colors.yellow[9]}30, ${theme.colors.orange[9]}30)`
-        : `linear-gradient(135deg, ${theme.colors.yellow[1]}, ${theme.colors.orange[1]})`,
-      color: theme.colorScheme === 'dark' ? theme.colors.yellow[3] : theme.colors.yellow[8],
+      background: `linear-gradient(135deg, ${theme.colors.yellow[1]}, ${theme.colors.orange[1]})`,
+      color: theme.colors.yellow[8],
     },
     
     '&[data-color="red"]': {
-      background: theme.colorScheme === 'dark' 
-        ? `linear-gradient(135deg, ${theme.colors.red[9]}30, ${theme.colors.pink[9]}30)`
-        : `linear-gradient(135deg, ${theme.colors.red[1]}, ${theme.colors.pink[1]})`,
-      color: theme.colorScheme === 'dark' ? theme.colors.red[3] : theme.colors.red[8],
+      background: `linear-gradient(135deg, ${theme.colors.red[1]}, ${theme.colors.pink[1]})`,
+      color: theme.colors.red[8],
     },
   },
   
   loadingContainer: {
-    background: theme.colorScheme === 'dark' 
-      ? `linear-gradient(135deg, ${theme.colors.dark[7]}, ${theme.colors.dark[6]})`
-      : `linear-gradient(135deg, ${theme.colors.gray[0]}, ${theme.white})`,
+    background: `linear-gradient(135deg, ${theme.colors.gray[0]}, ${theme.white})`,
     borderRadius: theme.radius.lg,
     padding: theme.spacing.xl * 2,
     textAlign: 'center',
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]}`,
+    border: `1px solid ${theme.colors.gray[2]}`,
   },
   
   emptyState: {
     textAlign: 'center',
     padding: theme.spacing.xl * 2,
-    background: theme.colorScheme === 'dark' 
-      ? `linear-gradient(135deg, ${theme.colors.dark[7]}, ${theme.colors.dark[6]})`
-      : `linear-gradient(135deg, ${theme.colors.gray[0]}, ${theme.white})`,
+    background: `linear-gradient(135deg, ${theme.colors.gray[0]}, ${theme.white})`,
     borderRadius: theme.radius.lg,
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]}`,
+    border: `1px solid ${theme.colors.gray[2]}`,
   },
   
   questionContent: {
-    background: theme.colorScheme === 'dark' 
-      ? theme.colors.dark[8]
-      : theme.white,
+    background: theme.white,
     borderRadius: theme.radius.md,
     padding: theme.spacing.lg,
-    border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]}`,
+    border: `1px solid ${theme.colors.gray[2]}`,
     marginBottom: theme.spacing.lg,
     position: 'relative',
     
@@ -274,7 +246,6 @@ const Quiz = ({ courseId, chapterId, onQuestionCountChange }) => {
   const { t } = useTranslation('chapterView');
   const { classes } = useStyles();
   const theme = useMantineTheme();
-  const { colorScheme } = useMantineColorScheme();
   
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -541,7 +512,7 @@ const Quiz = ({ courseId, chapterId, onQuestionCountChange }) => {
     return (
       <Paper className={classes.emptyState}>
         <Stack align="center" spacing="md">
-          <ThemeIcon size={80} radius="xl" variant="gradient" gradient={{ from: 'gray', to: 'dark' }}>
+          <ThemeIcon size={80} radius="xl" variant="gradient" gradient={{ from: 'gray', to: 'blue' }}>
             <IconSparkles size={40} />
           </ThemeIcon>
           <Title order={3} color="dimmed">No Quiz Available</Title>
@@ -675,7 +646,7 @@ const Quiz = ({ courseId, chapterId, onQuestionCountChange }) => {
                         radius="md"
                         styles={{
                           input: {
-                            border: `1px solid ${colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[3]}`,
+                            border: `1px solid ${theme.colors.gray[3]}`,
                             '&:focus': {
                               borderColor: theme.colors.violet[6],
                             },
@@ -704,10 +675,10 @@ const Quiz = ({ courseId, chapterId, onQuestionCountChange }) => {
                         radius="md"
                         styles={{
                           input: {
-                            backgroundColor: colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[1],
-                            color: colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.gray[7],
+                            backgroundColor: theme.colors.gray[1],
+                            color: theme.colors.gray[7],
                             cursor: 'not-allowed',
-                            border: `1px solid ${colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[3]}`,
+                            border: `1px solid ${theme.colors.gray[3]}`,
                           },
                         }}
                       />

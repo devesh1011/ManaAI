@@ -1,6 +1,6 @@
 //ChapterView.jsx - Fixed tab switching logic
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -59,6 +59,14 @@ function ChapterView() {
   const [questionCount, setQuestionCount] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false); // New state for blinking
   const [quizKey, setQuizKey] = useState(0); // Force Quiz component re-mount
+
+  // Memoize the callback to prevent Quiz component re-mounting
+  const handleQuestionCountChange = useCallback((count) => {
+    console.log('ChapterView: Quiz onQuestionCountChange called with count:', count);
+    console.log('ChapterView: Setting hasQuestions to:', count > 0);
+    setQuestionCount(count);
+    setHasQuestions(count > 0);
+  }, []);
 
   // Refs for cleanup
   const contentRef = useRef(null);
@@ -216,15 +224,19 @@ function ChapterView() {
     const currentChapter = chapters.find(ch => ch.id.toString() === chapterId);
     const chapterQuizQuestions = currentChapter?.quiz_questions || [];
 
-    if (chapterQuizQuestions.length > 0) {
-      setHasQuestions(true);
-      setQuestionCount(chapterQuizQuestions.length);
+    // Only update if the question count actually changed
+    const newQuestionCount = chapterQuizQuestions.length;
+    const shouldUpdateQuestions = newQuestionCount !== questionCount;
 
-      // Force Quiz component to re-mount and fetch new data
-      setQuizKey(prev => prev + 1);
+    if (shouldUpdateQuestions) {
+      setHasQuestions(newQuestionCount > 0);
+      setQuestionCount(newQuestionCount);
 
-      // Start blinking animation if questions were just created
-      if (!hasQuestions) {
+      // Only force Quiz component re-mount if questions were just added (not removed)
+      if (newQuestionCount > 0 && questionCount === 0) {
+        setQuizKey(prev => prev + 1);
+
+        // Start blinking animation if questions were just created
         setIsBlinking(true);
         blinkTimeoutRef.current = setTimeout(() => {
           setIsBlinking(false);
@@ -232,11 +244,8 @@ function ChapterView() {
 
         toast.success(t("quizReady"));
       }
-    } else {
-      setHasQuestions(false);
-      setQuestionCount(0);
     }
-  }, [chapters, chapterId, hasQuestions, t]);
+  }, [chapters, chapterId, questionCount, t]); // Added questionCount to dependencies
 
   // Cleanup on unmount
   useEffect(() => {
@@ -474,12 +483,15 @@ function ChapterView() {
                 {files.length > 0 && (
                   <Tabs.Tab value="files" icon={<IconFileText size={14} />}>{t('tabs.files')}</Tabs.Tab>
                 )}
-                {hasQuestions && (
+                {console.log('ChapterView: About to render tabs, hasQuestions:', hasQuestions, 'questionCount:', questionCount)}
+                {/* Temporarily force quiz tab to always show for debugging */}
+                {true && (
                   <Tabs.Tab 
                     value="quiz" 
                     icon={<IconQuestionMark size={14} />}
                     className={isBlinking ? 'quiz-tab-blinking' : ''}
                   >
+                    {console.log('ChapterView: Rendering quiz tab with questionCount:', questionCount)}
                     {questionCount > 0 ? t('tabs.quiz', { count: questionCount }) : 'Quiz'}
                   </Tabs.Tab>
                 )}
@@ -528,11 +540,7 @@ function ChapterView() {
                   key={quizKey}
                   courseId={courseId}
                   chapterId={chapterId}
-                  onQuestionCountChange={(count) => {
-                    console.log('ChapterView: Quiz onQuestionCountChange called with count:', count);
-                    setQuestionCount(count);
-                    setHasQuestions(count > 0);
-                  }}
+                  onQuestionCountChange={handleQuestionCountChange}
                   style={{ width: '100%' }}
                 />
               </Tabs.Panel>

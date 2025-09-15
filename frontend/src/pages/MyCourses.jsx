@@ -207,9 +207,7 @@ function MyCourses() {
         pb="xl"
         mb="xl"
         style={{
-          borderBottom: `1px solid ${
-            theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
-          }`,
+          borderBottom: `1px solid ${theme.colors.gray[2]}`,
         }}
       >
         <Group position="apart">
@@ -232,7 +230,7 @@ function MyCourses() {
       />
 
       {filteredCourses.length === 0 && !loading ? (
-        <Paper withBorder radius="md" p="xl" mt="xl" bg={theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]}>
+        <Paper withBorder radius="md" p="xl" mt="xl" bg={theme.colors.gray[0]}>
           <Stack align="center" spacing="md" py="xl">
             <IconBook size={60} color={theme.colors.gray[6]} stroke={1.5} />
             <Title order={3} align="center">

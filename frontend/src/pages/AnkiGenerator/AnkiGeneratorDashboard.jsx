@@ -1,6 +1,6 @@
 // /frontend/src/pages/AnkiGenerator/AnkiGeneratorDashboard.jsx
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -57,7 +57,7 @@ const AnkiGeneratorDashboard = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [summary, setSummary] = useState(null);
-  const [processingStatus, setProcessingStatus] = useState(null);
+  // const [processingStatus, setProcessingStatus] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
 

@@ -540,32 +540,6 @@ function Dashboard() {
         </Stack>
       )}
 
-      {/* Empty state - removed duplicate */}
-            <Text align="center" size="lg" maw={500} mx="auto" color="dimmed">
-              {t('emptyState.message')}
-            </Text>
-            <Button 
-              size="lg"
-              onClick={() => navigate('/dashboard/create-course')} 
-              color="teal"
-              leftIcon={<IconStars size={20} />}
-              mt="md"
-              sx={(theme) => ({
-                background: theme.colorScheme === 'dark' ? 
-                  `linear-gradient(45deg, ${theme.colors.teal[9]}, ${theme.colors.cyan[7]})` : 
-                  `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[4]})`,
-                transition: 'transform 0.2s ease',
-                '&:hover': {
-                  transform: 'translateY(-3px)',
-                },
-              })}
-            >
-              {t('emptyState.button')}
-            </Button>
-          </Stack>
-        </Paper>
-      )}
-
       {/* Featured Course (if available) */}
       {!loading && !error && courses.length > 0 && (
         <>
@@ -686,14 +660,7 @@ function Dashboard() {
                     />
                   </Card.Section>
 
-          <Grid>
-            {displayedCourses.map((course) => {
-              const statusInfo = getStatusInfo(course.status);
-              const StatusIcon = statusInfo.Icon;
-              const progress = calculateProgress(course);
-
-              return (
-                <Grid.Col key={course.course_id} xs={12} sm={6} lg={4}>
+                  <Card.Section withBorder inheritPadding py="xs" mt="md">
                   <Card 
                     shadow="sm" 
                     padding="lg" 
@@ -846,9 +813,6 @@ function Dashboard() {
               );
             })}
           </Grid>
-        </>
-      )}
-        </Stack>
       )}
     </Container>
   );

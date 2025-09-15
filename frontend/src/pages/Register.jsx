@@ -169,43 +169,65 @@ function Register() {
   return (
     <Container size={460} my={40}>
       <Group position="center" align="center" spacing="xs" mb={20}>
+        <Stack spacing="xxs">
+          <Title 
+            order={1} 
+            size={32} 
+            weight={700} 
+            align="center"
+            className="font-friendly text-african_violet-500"
+          >
+            {t("createAccount", "Create Account")}
+          </Title>
+          <Text 
+            color="dimmed" 
+            size="lg" 
+            align="center" 
+            mb="xl"
+            className="font-friendly text-davys_gray-600"
+          >
+            {t("joinToContinue", "Join ManaAI to start your learning journey")}
+          </Text>
+        </Stack>
+      </Group>
 
-              <Stack spacing="xxs">
-                <Title order={1} size={32} weight={700} align="center">
-                  {t("welcomeBack")}
-                </Title>
-                <Text color="dimmed" size="lg" align="center" mb="xl">
-                  {t("signInToContinue")}
-                </Text>
-              </Stack>
-            </Group>
-
-      <Paper withBorder p={30} radius="md">
+      <Paper 
+        withBorder 
+        p={30} 
+        radius="brutalist-xl"
+        className="bg-snow-500 border-african_violet-200 shadow-brutalist-lg"
+      >
         <Button
           leftIcon={<IconBrandGoogleFilled size={20} />}
-          variant="default"
+          variant="outline"
           fullWidth
-          size="md"
+          size="lg"
           onClick={handleGoogleLogin}
           mb="xl"
-          style={{ height: 46 }}
+          className="border-african_violet-300 text-african_violet-600 hover:bg-african_violet-50 font-friendly h-12 rounded-brutalist transition-all duration-200 hover:transform hover:-translate-y-0.5"
         >
           {t("continueWithGoogle")}
         </Button>
         
         <Divider 
           label={
-            <Text size="sm" color="dimmed">
+            <Text size="sm" color="dimmed" className="font-friendly bg-snow-500 px-2">
               {t("orContinueWithEmail")}
             </Text>
           } 
           labelPosition="center" 
-          my="lg" 
+          my="lg"
+          className="border-african_violet-200"
         />
         
         <form onSubmit={form.onSubmit(handleSubmit)}>
           {error && (
-            <Text color="red" size="sm" mb="md">
+            <Text 
+              color="red" 
+              size="sm" 
+              mb="md"
+              className="bg-pumpkin-900 text-pumpkin-100 p-3 rounded-brutalist font-friendly"
+            >
               {error}
             </Text>
           )}
@@ -214,7 +236,12 @@ function Register() {
               label={t("username")}
               placeholder={t("usernamePlaceholder")}
               required
-              size="md"
+              size="lg"
+              className="font-friendly"
+              styles={{
+                label: { color: 'var(--mantine-color-african_violet-6)', fontWeight: 500 },
+                input: { borderColor: 'var(--mantine-color-african_violet-3)', '&:focus': { borderColor: 'var(--mantine-color-african_violet-5)' } }
+              }}
               {...form.getInputProps("username")}
             />
             
@@ -222,7 +249,12 @@ function Register() {
               label={t("email")}
               placeholder={t("emailPlaceholder", "Your email")}
               required
-              size="md"
+              size="lg"
+              className="font-friendly"
+              styles={{
+                label: { color: 'var(--mantine-color-african_violet-6)', fontWeight: 500 },
+                input: { borderColor: 'var(--mantine-color-african_violet-3)', '&:focus': { borderColor: 'var(--mantine-color-african_violet-5)' } }
+              }}
               {...form.getInputProps("email")}
             />
             
@@ -230,7 +262,12 @@ function Register() {
               label={t("password")}
               placeholder={t("passwordPlaceholder")}
               required
-              size="md"
+              size="lg"
+              className="font-friendly"
+              styles={{
+                label: { color: 'var(--mantine-color-african_violet-6)', fontWeight: 500 },
+                input: { borderColor: 'var(--mantine-color-african_violet-3)', '&:focus': { borderColor: 'var(--mantine-color-african_violet-5)' } }
+              }}
               {...form.getInputProps("password")}
             />
             
@@ -238,25 +275,35 @@ function Register() {
               label={t("confirmPassword")}
               placeholder={t("confirmPasswordPlaceholder", "Confirm your password")}
               required
-              size="md"
+              size="lg"
+              className="font-friendly"
+              styles={{
+                label: { color: 'var(--mantine-color-african_violet-6)', fontWeight: 500 },
+                input: { borderColor: 'var(--mantine-color-african_violet-3)', '&:focus': { borderColor: 'var(--mantine-color-african_violet-5)' } }
+              }}
               {...form.getInputProps("confirmPassword")}
             />
 
               <Button 
                 fullWidth 
                 type="submit" 
-                size="md" 
-                loading={isLoading} 
-                style={{ height: 46 }}
+                size="lg" 
+                loading={isLoading}
+                className="bg-gradient-to-r from-african_violet-500 to-pumpkin-500 hover:from-african_violet-600 hover:to-pumpkin-600 text-white font-friendly h-12 rounded-brutalist transition-all duration-200 hover:transform hover:-translate-y-0.5 shadow-brutalist"
               >
                 {t("signUp")}
               </Button>
             </Stack>
         </form>
 
-        <Text align="center" mt="lg">
+        <Text align="center" mt="lg" className="font-friendly text-davys_gray-600">
           {t("haveAccount")}{" "}
-          <Anchor component={Link} to="/auth/login" weight={600}>
+          <Anchor 
+            component={Link} 
+            to="/auth/login" 
+            weight={600}
+            className="text-african_violet-600 hover:text-african_violet-700 no-underline hover:underline"
+          >
             {t("signIn")}
           </Anchor>
         </Text>

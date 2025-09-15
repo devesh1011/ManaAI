@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -102,7 +102,7 @@ function AdminView() {
     };
     
     loadUsers();
-  }, []);
+  }, [fetchUsers, filterUsers]);
 
   const handleSort = (key) => {
     setSortConfig(prevConfig => ({
@@ -187,7 +187,7 @@ function AdminView() {
     if (users.length > 0) {
       filterUsers();
     }
-  }, [searchTerm, users, activeTab]);
+  }, [searchTerm, users, activeTab, filterUsers]);
 
   // Calculate user stats when users change
   useEffect(() => {
@@ -245,7 +245,7 @@ function AdminView() {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -259,9 +259,9 @@ function AdminView() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
-  const filterUsers = () => {
+  const filterUsers = useCallback(() => {
     let filtered = [...users];
     
     // Filter by search term
@@ -282,7 +282,7 @@ function AdminView() {
     }
     
     setFilteredUsers(filtered);
-  };
+  }, [users, searchTerm, activeTab]);
 
   const handleDeleteUser = async () => {
     try {

@@ -273,7 +273,7 @@ function CreateCourse() {
                 mb="sm"
               >
                 <img 
-                  src="/logo_white_mittig.png"
+                  src="/own-logo.png"
                   alt="Logo"
                   style={{ 
                     height: 28,
@@ -300,7 +300,7 @@ function CreateCourse() {
                   lineHeight: 1.5,
                   padding: '12px 16px',
                   borderRadius: 8,
-                  border: `2px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+                  border: `2px solid ${theme.colors.gray[3]}`,
                   '&:focus': {
                     borderColor: theme.colors.teal[6],
                     boxShadow: `0 0 0 3px ${theme.colors.teal[6]}20`
@@ -466,7 +466,7 @@ function CreateCourse() {
               </Text>
             </Box>
 
-            <Card p="lg" withBorder radius="lg" bg={theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]}>
+            <Card p="lg" withBorder radius="lg" bg={theme.colors.gray[0]}>
               <Center mb="lg">
                 <RingProgress
                   size={160}
@@ -561,11 +561,11 @@ function CreateCourse() {
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         backgroundColor: form.values.difficulty === option.value 
-                          ? (theme.colorScheme === 'dark' ? theme.colors.teal[9] : theme.colors.teal[0])
+                          ? theme.colors.teal[0]
                           : 'transparent',
                         borderColor: form.values.difficulty === option.value 
                           ? theme.colors.teal[6] 
-                          : (theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]),
+                          : theme.colors.gray[3],
                         '&:hover': {
                           borderColor: theme.colors.teal[6],
                           transform: 'translateY(-1px)'
@@ -638,7 +638,7 @@ function CreateCourse() {
               </Text>
             </Box>
 
-            <Card p="lg" withBorder radius="lg" bg={theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]}>
+            <Card p="lg" withBorder radius="lg" bg={theme.colors.gray[0]}>
               <Stack spacing="md">
                 <Group position="apart">
                   <Text weight={600} color="dimmed">{t('form.topic.label') || 'Learning Goal'}</Text>
@@ -651,10 +651,10 @@ function CreateCourse() {
                   </ActionIcon>
                 </Group>
                 <Text sx={{
-                  backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.white,
+                  backgroundColor: theme.white,
                   padding: 12,
                   borderRadius: 6,
-                  border: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+                  border: `1px solid ${theme.colors.gray[3]}`,
                   fontSize: 14,
                   lineHeight: 1.4
                 }}>
@@ -778,18 +778,14 @@ function CreateCourse() {
         withBorder 
         sx={{
           overflow: 'hidden',
-          background: theme.colorScheme === 'dark' 
-            ? `linear-gradient(135deg, ${theme.colors.dark[7]}, ${theme.colors.dark[6]})`
-            : `linear-gradient(135deg, ${theme.white}, ${theme.colors.gray[0]})`,
+          background: `linear-gradient(135deg, ${theme.white}, ${theme.colors.gray[0]})`,
         }}
       >
         {/* Header */}
         <Box 
           p="lg" 
           sx={{
-            background: theme.colorScheme === 'dark' 
-              ? `linear-gradient(45deg, ${theme.colors.teal[9]}, ${theme.colors.cyan[8]})`
-              : `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[5]})`,
+            background: `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[5]})`,
             color: 'white',
             position: 'relative'
           }}
@@ -837,8 +833,8 @@ function CreateCourse() {
           p="lg" 
           pt="sm"
           sx={{
-            borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]}`,
-            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+            borderTop: `1px solid ${theme.colors.gray[3]}`,
+            backgroundColor: theme.colors.gray[0]
           }}
         >
           <Group position="apart">

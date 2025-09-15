@@ -60,6 +60,33 @@ function CourseView() {
   const [hasSeenVideo, setHasSeenVideo] = useState(false);
   const [contentReady, setContentReady] = useState(false);
 
+  // NEW: Auto-refresh fallback for course completion
+  const [courseCreationStartTime, setCourseCreationStartTime] = useState(null);
+  const [showRefreshButton, setShowRefreshButton] = useState(false);
+
+  // Track when course creation started
+  useEffect(() => {
+    if (course?.status === 'creating' && !courseCreationStartTime) {
+      setCourseCreationStartTime(Date.now());
+      setShowRefreshButton(false);
+    } else if (course?.status === 'finished') {
+      setCourseCreationStartTime(null);
+      setShowRefreshButton(false);
+    }
+  }, [course?.status, courseCreationStartTime]);
+
+  // Show refresh button after 2 minutes of creating status (fallback)
+  useEffect(() => {
+    if (courseCreationStartTime && course?.status === 'creating') {
+      const timeElapsed = Date.now() - courseCreationStartTime;
+      const twoMinutes = 2 * 60 * 1000;
+
+      if (timeElapsed > twoMinutes && !showRefreshButton) {
+        setShowRefreshButton(true);
+      }
+    }
+  }, [courseCreationStartTime, course?.status, showRefreshButton]);
+
   const [creationProgressUI, setCreationProgressUI] = useState({
     statusText: t('creation.statusInitializing'),
     percentage: 0,
@@ -150,7 +177,7 @@ function CourseView() {
 
   if (loading && !course) {
     return (
-      <Container 
+      <Container
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -164,6 +191,9 @@ function CourseView() {
         <Loader size="xl" variant="dots" />
         <Text size="lg" color="dimmed">
           {t('loadingCourseDetails')}
+        </Text>
+        <Text size="sm" color="dimmed" mt="xs">
+          {t('creation.preparingYourCourse')}
         </Text>
       </Container>
     );
@@ -317,9 +347,7 @@ function CourseView() {
           mb="xl"
           sx={(theme) => ({
             position: 'relative',
-            overflow: 'hidden', backgroundColor: theme.colorScheme === 'dark' ?
-              theme.colors.dark[6] :
-              theme.white,
+            overflow: 'hidden', backgroundColor: theme.white,
           })}
         >
           <Box
@@ -398,9 +426,7 @@ function CourseView() {
             px="lg"
             mt="md"
             sx={(theme) => ({
-              backgroundColor: theme.colorScheme === 'dark' ?
-                theme.colors.dark[7] :
-                theme.fn.rgba(theme.colors.gray[0], 0.7),
+              backgroundColor: theme.fn.rgba(theme.colors.gray[0], 0.7),
               borderRadius: theme.radius.md,
               position: 'relative',
               zIndex: 2,
@@ -416,15 +442,16 @@ function CourseView() {
               </Text>
             )}
 
-            {creationProgressUI.percentage === 100 && (
+            {/* Removed manual reload button - auto-refresh should work via WebSocket */}
+            {showRefreshButton && (
               <Group position="center" mt="md">
                 <Button
-                  variant="gradient"
-                  gradient={{ from: 'teal', to: 'green' }}
+                  variant="outline"
+                  color="orange"
                   leftIcon={<IconArrowRight size={16} />}
                   onClick={() => window.location.reload()}
                 >
-                  {t('buttons.viewCompletedCourse')}
+                  {t('buttons.refreshIfStuck')}
                 </Button>
               </Group>
             )}
@@ -465,7 +492,7 @@ function CourseView() {
             sx={(theme) => ({
               position: 'relative',
               overflow: 'hidden',
-              backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
+              backgroundColor: theme.white,
             })}
           >
             <Grid gutter={0}>
@@ -501,9 +528,7 @@ function CourseView() {
                     sx={(theme) => ({
                       fontSize: '2.5rem',
                       fontWeight: 900,
-                      backgroundImage: theme.colorScheme === 'dark'
-                        ? `linear-gradient(45deg, ${theme.colors.teal[4]}, ${theme.colors.cyan[6]})`
-                        : `linear-gradient(45deg, ${theme.colors.teal[7]}, ${theme.colors.cyan[5]})`,
+                      backgroundImage: `linear-gradient(45deg, ${theme.colors.teal[7]}, ${theme.colors.cyan[5]})`,
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                     })}
@@ -610,7 +635,7 @@ function CourseView() {
                 order={2}
                 sx={(theme) => ({
                   fontWeight: 700,
-                  color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+                  color: theme.black,
                 })}
               >
                 {t('learningJourneyLabel')}
@@ -651,7 +676,7 @@ function CourseView() {
 
           {course.status === "creating" && chapters.length === 0 && creationProgressUI.estimatedTotal === 0 && (
             <Paper withBorder p="xl" radius="md" mb="lg" sx={(theme) => ({
-              backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
+              backgroundColor: theme.colors.gray[0],
               textAlign: 'center',
             })}>
               <Loader size="md" mb="md" mx="auto" />
@@ -682,7 +707,7 @@ function CourseView() {
                     position: 'relative',
                     display: 'flex',
                     flexDirection: 'column',
-                    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
+                    backgroundColor: theme.white,
                     transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                     '&:hover': {
                       transform: 'translateY(-5px)',
@@ -794,9 +819,7 @@ function CourseView() {
                         chapter.is_completed
                           ? {}
                           : {
-                            background: theme.colorScheme === 'dark' ?
-                              `linear-gradient(45deg, ${theme.colors.teal[9]}, ${theme.colors.blue[8]})` :
-                              `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[5]})`,
+                            background: `linear-gradient(45deg, ${theme.colors.teal[6]}, ${theme.colors.cyan[5]})`,
                           }
                       }
                     >
@@ -833,9 +856,7 @@ function CourseView() {
                     sx={(theme) => ({
                       display: 'flex',
                       flexDirection: 'column',
-                      backgroundColor: theme.colorScheme === 'dark' ?
-                        theme.fn.rgba(theme.colors.dark[6], 0.8) :
-                        theme.fn.rgba(theme.white, 0.8),
+                      backgroundColor: theme.fn.rgba(theme.white, 0.8),
                     })}
                   >
                     <Card.Section>

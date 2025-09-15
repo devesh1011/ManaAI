@@ -64,7 +64,6 @@ function StatisticsPage() {
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation('statisticsPage');
   const theme = useMantineTheme();
-  const isDark = theme.colorScheme === 'dark';
 
   // Fetch statistics when component mounts
   useEffect(() => {
@@ -95,8 +94,8 @@ function StatisticsPage() {
   }
 
   const chartColors = {
-    gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
-    textColor: isDark ? '#C1C2C5' : '#333333',
+    gridColor: 'rgba(0, 0, 0, 0.1)',
+    textColor: '#333333',
   };
 
   if (loading) {
@@ -133,10 +132,10 @@ function StatisticsPage() {
         display: false,
       },
       tooltip: {
-        backgroundColor: isDark ? '#2C2E33' : 'white',
-        titleColor: isDark ? '#C1C2C5' : '#333333',
-        bodyColor: isDark ? '#C1C2C5' : '#333333',
-        borderColor: isDark ? '#5C5F66' : '#CED4DA',
+        backgroundColor: 'white',
+        titleColor: '#333333',
+        bodyColor: '#333333',
+        borderColor: '#CED4DA',
         borderWidth: 1
       }
     },
@@ -293,14 +292,14 @@ function StatisticsPage() {
       
       {/* Tabs for different time periods */}      <Tabs defaultValue="daily" mt="xl" styles={{
         tabsList: {
-          borderBottom: `1px solid ${isDark ? theme.colors.dark[4] : theme.colors.gray[3]}`,
+          borderBottom: `1px solid ${theme.colors.gray[3]}`,
         },
         tab: {
           fontWeight: 500,
           height: 38,
           backgroundColor: 'transparent',
           '&[data-active]': {
-            borderColor: theme.colors.blue[isDark ? 5 : 7],
+            borderColor: theme.colors.blue[7],
           },
         },
         panel: {
@@ -325,8 +324,8 @@ function StatisticsPage() {
               <Grid.Col span={12}>
                 <Paper p="md" radius="md" withBorder sx={{ 
                   height: 400, 
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white
                 }}>
                   <Title order={3} mb="md">{t('dailyTab.learningActivityTitle')}</Title>
                   <Box sx={{ height: 300 }}>
@@ -343,8 +342,8 @@ function StatisticsPage() {
               <Grid.Col md={6}>
                 <Paper p="md" radius="md" withBorder sx={{ 
                   height: 300, 
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white
                 }}>
                   <Group position="apart" mb="lg">
                     <Title order={3}>{t('dailyTab.quizPerformanceTitle')}</Title>
@@ -368,8 +367,8 @@ function StatisticsPage() {
               <Grid.Col md={6}>
                 <Paper p="md" radius="md" withBorder sx={{ 
                   height: 300, 
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white
                 }}>
                   <Title order={3} mb="lg">{t('dailyTab.activeHoursTitle')}</Title>
                   <Box sx={{ height: 200 }}>
@@ -404,8 +403,8 @@ function StatisticsPage() {
                   width: '100%',
                   maxWidth: 600,
                   margin: '0 auto',
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white,
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
@@ -429,8 +428,8 @@ function StatisticsPage() {
                   <Grid.Col span={12} md={12} sm={12}>
                     <Paper p="md" radius="md" withBorder sx={{ 
                       height: 140, 
-                      borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                      backgroundColor: isDark ? theme.colors.dark[7] : theme.white,
+                      borderColor: theme.colors.gray[3],
+                      backgroundColor: theme.white,
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
@@ -473,8 +472,8 @@ function StatisticsPage() {
                   <Grid.Col span={12} md={12} sm={12}>
                     <Paper p="md" radius="md" withBorder sx={{ 
                       height: 140, 
-                      borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                      backgroundColor: isDark ? theme.colors.dark[7] : theme.white,
+                      borderColor: theme.colors.gray[3],
+                      backgroundColor: theme.white,
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
@@ -515,8 +514,8 @@ function StatisticsPage() {
           <Tabs.Panel value="monthly" pt="md">
             <Paper p="md" radius="md" withBorder sx={{ 
               height: 400, 
-              borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-              backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+              borderColor: theme.colors.gray[3],
+              backgroundColor: theme.white
             }}>
               <Title order={3} mb="md">{t('monthlyTab.monthlyProgressTitle')}</Title>
               <Box sx={{ height: 300 }}>
@@ -529,8 +528,8 @@ function StatisticsPage() {
             <SimpleGrid cols={2} mt="md" spacing="lg" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
               <Paper p="md" radius="md" withBorder sx={{ 
                 height: 300, 
-                borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                borderColor: theme.colors.gray[3],
+                backgroundColor: theme.white
               }}>
                 <Title order={3} mb="md">{t('monthlyTab.learningHoursTitle')}</Title>
                 <Box sx={{ height: 200 }}>
@@ -553,8 +552,8 @@ function StatisticsPage() {
               </Paper>
               <Paper p="md" radius="md" withBorder sx={{ 
                 height: 300, 
-                borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                borderColor: theme.colors.gray[3],
+                backgroundColor: theme.white
               }}>
                 <Title order={3} mb="md">{t('monthlyTab.achievementGrowthTitle')}</Title>
                 <Box sx={{ height: 200 }}>
@@ -583,8 +582,8 @@ function StatisticsPage() {
               <Grid.Col md={6}>
                 <Paper p="md" radius="md" withBorder sx={{ 
                   height: 400, 
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white
                 }}>
                   <Title order={3} mb="md">{t('subjectsTab.distributionTitle')}</Title>
                   <Box sx={{ height: 340, display: 'flex', justifyContent: 'center' }}>
@@ -607,8 +606,8 @@ function StatisticsPage() {
               <Grid.Col md={6}>
                 <Paper p="md" radius="md" withBorder sx={{ 
                   height: 400,
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white
                 }}>
                   <Title order={3} mb="md">{t('subjectsTab.performanceTitle')}</Title>
                   <Box sx={{ height: 340 }}>
@@ -662,8 +661,8 @@ function StatisticsPage() {
                   }
                   const subjectCard = (
                 <Paper key={subject} p="md" radius="md" withBorder sx={{ 
-                  borderColor: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-                  backgroundColor: isDark ? theme.colors.dark[7] : theme.white
+                  borderColor: theme.colors.gray[3],
+                  backgroundColor: theme.white
                 }}>
                   <Group position="apart">
                     <Text weight={700} size="lg">{subject}</Text>
@@ -706,7 +705,7 @@ function StatisticsPage() {
 function StatsCard({ icon, color, label, value, total, percentage, subtitle }) {
   const { t } = useTranslation('statisticsPage'); // Add hook here for StatsCard
   const theme = useMantineTheme();
-  const isDark = theme.colorScheme === 'dark';
+  const isDark = false;
   
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder sx={{

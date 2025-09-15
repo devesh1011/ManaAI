@@ -1,6 +1,6 @@
 // /frontend/src/pages/AnkiGenerator/AnkiProcessingStatus.jsx
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -60,7 +60,7 @@ const AnkiProcessingStatus = () => {
   const pollIntervalRef = useRef(null);
 
   // Fetch task status
-  const fetchTaskStatus = async () => {
+  const fetchTaskStatus = useCallback(async () => {
     try {
       const status = await ankiService.getTaskStatus(taskId);
       setTaskStatus(status);
@@ -81,7 +81,7 @@ const AnkiProcessingStatus = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [taskId]);
 
   // Start polling for status updates
   useEffect(() => {
@@ -99,7 +99,7 @@ const AnkiProcessingStatus = () => {
         }
       };
     }
-  }, [taskId]);
+  }, [taskId, fetchTaskStatus]);
 
   // Handle download
   const handleDownload = async () => {

@@ -14,8 +14,6 @@ import {
   Box,
   Space,
   Image,
-  useMantineColorScheme,
-  useMantineTheme,
   Group,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons-react";
@@ -30,13 +28,10 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
-  const { colorScheme } = useMantineColorScheme();
-  const theme = useMantineTheme();
   const [error, setError] = useState("");
 
-  // Use white logo for dark theme, black for light theme
-  const logoPath =
-    colorScheme === "dark" ? "/logo_white.png" : "/logo_black.png";
+  // Use the new logo
+  const logoPath = "/own-logo.png";
 
   const form = useForm({
     initialValues: {
@@ -126,44 +121,73 @@ function Login() {
 
   return (
     <Container align="center" size={460} my={40}>
-      <Group position="center"  align="center" spacing="xs" mb={20}>
-        <Image src={logoPath} width={80} mb="md" alt="Mana AI Logo" />
+      <Group position="center" align="center" spacing="xs" mb={20}>
+        <Image 
+          src={logoPath} 
+          width={80} 
+          mb="md" 
+          alt="Mana AI Logo" 
+          className="rounded-brutalist-lg" 
+        />
         <Stack spacing="xxs">
-          <Title order={1} size={32} weight={700} align="center">
+          <Title 
+            order={1} 
+            size={32} 
+            weight={700} 
+            align="center"
+            className="font-friendly text-african_violet-500"
+          >
             {t("welcomeBack")}
           </Title>
-          <Text color="dimmed" size="lg" align="center" mb="xl">
+          <Text 
+            color="dimmed" 
+            size="lg" 
+            align="center" 
+            mb="xl"
+            className="font-friendly text-davys_gray-600"
+          >
             {t("signInToContinue")}
           </Text>
         </Stack>
       </Group>
 
-      <Paper withBorder p={30} radius="md">
+      <Paper 
+        withBorder 
+        p={30} 
+        radius="brutalist-xl"
+        className="bg-snow-500 border-african_violet-200 shadow-brutalist-lg"
+      >
         {error && (
-          <Text color="red" size="sm" mb="md">
+          <Text 
+            color="red" 
+            size="sm" 
+            mb="md" 
+            className="bg-pumpkin-900 text-pumpkin-100 p-3 rounded-brutalist font-friendly"
+          >
             {error}
           </Text>
         )}
         <Button
           leftIcon={<IconBrandGoogleFilled size={20} />}
-          variant="default"
+          variant="outline"
           fullWidth
-          size="md"
+          size="lg"
           onClick={handleGoogleLogin}
           mb="xl"
-          style={{ height: 46 }}
+          className="border-african_violet-300 text-african_violet-600 hover:bg-african_violet-50 font-friendly h-12 rounded-brutalist transition-all duration-200 hover:transform hover:-translate-y-0.5"
         >
           {t("continueWithGoogle")}
         </Button>
 
         <Divider
           label={
-            <Text size="sm" color="dimmed">
+            <Text size="sm" color="dimmed" className="font-friendly bg-snow-500 px-2">
               {t("orContinueWithEmail")}
             </Text>
           }
           labelPosition="center"
           my="lg"
+          className="border-african_violet-200"
         />
 
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -172,7 +196,12 @@ function Login() {
               label={t("username")}
               placeholder={t("usernamePlaceholder")}
               required
-              size="md"
+              size="lg"
+              className="font-friendly"
+              styles={{
+                label: { color: 'var(--mantine-color-african_violet-6)', fontWeight: 500 },
+                input: { borderColor: 'var(--mantine-color-african_violet-3)', '&:focus': { borderColor: 'var(--mantine-color-african_violet-5)' } }
+              }}
               {...form.getInputProps("username")}
             />
 
@@ -180,27 +209,35 @@ function Login() {
               label={t("password")}
               placeholder={t("passwordPlaceholder")}
               required
-              size="md"
+              size="lg"
+              className="font-friendly"
+              styles={{
+                label: { color: 'var(--mantine-color-african_violet-6)', fontWeight: 500 },
+                input: { borderColor: 'var(--mantine-color-african_violet-3)', '&:focus': { borderColor: 'var(--mantine-color-african_violet-5)' } }
+              }}
               {...form.getInputProps("password")}
             />
 
             <Button
               fullWidth
               type="submit"
-              size="md"
+              size="lg"
               loading={isLoading}
-              style={{ height: 46 }}
-              variant="gradient"
-              gradient={{ from: 'cyan', to: 'teal' }}
+              className="bg-gradient-to-r from-african_violet-500 to-pumpkin-500 hover:from-african_violet-600 hover:to-pumpkin-600 text-white font-friendly h-12 rounded-brutalist transition-all duration-200 hover:transform hover:-translate-y-0.5 shadow-brutalist"
             >
               {t("signIn")}
             </Button>
           </Stack>
         </form>
 
-        <Text align="center" mt="lg">
+        <Text align="center" mt="lg" className="font-friendly text-davys_gray-600">
           {t("noAccount")}{" "}
-          <Anchor component={Link} to="/auth/signup" weight={600}>
+          <Anchor 
+            component={Link} 
+            to="/auth/signup" 
+            weight={600}
+            className="text-african_violet-600 hover:text-african_violet-700 no-underline hover:underline"
+          >
             {t("signUp")}
           </Anchor>
         </Text>
