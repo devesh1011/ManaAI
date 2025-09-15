@@ -19,7 +19,7 @@ from typing import List
 from pydantic import Field
 
 
-class CourseStatus(enum.Enum):
+class CourseStatus(str, enum.Enum):
     CREATING = "creating"
     UPDATING = "updating"
     FINISHED = "finished"
