@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [t]); // t for potential future use in error messages
+  }, []); // fetchAndSetCurrentUser has no dependencies
 
   const login = useCallback(async (username, password) => {
     console.log("AuthContext: login called for username:", username);
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
       // authService.register makes the API call.
       // Depending on backend, it might auto-login (set cookies) or just create the user.
       // Assuming it does not auto-login here for simplicity.
-      const response = await authService.register(username, email, password);
+      await authService.register(username, email, password);
       toast.success(t('notifications.registerSuccess'));
       console.log(`AuthContext: Registration successful for user: ${username}`);
 
@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [fetchAndSetCurrentUser, t]);
 
   const logout = useCallback(async () => {
     console.log("AuthContext: logout called.");

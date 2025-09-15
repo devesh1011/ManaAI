@@ -87,10 +87,29 @@ export const CourseProvider = ({ children }) => {
         break;
 
       case 'course_completed':
-        // Update course status
+        console.log('Course completed via WebSocket, updating status and refetching data');
+        // Update course status and refetch complete data
         setCourse(prevCourse =>
           prevCourse ? { ...prevCourse, status: 'finished' } : null
         );
+
+        // Refetch complete course and chapters data to ensure everything is up to date
+        if (currentCourseId) {
+          courseService.getCourseById(currentCourseId)
+            .then(courseData => {
+              console.log('Refetched course data after completion:', courseData);
+              setCourse(courseData);
+            })
+            .catch(err => console.error('Failed to refetch course data:', err));
+
+          courseService.getCourseChapters(currentCourseId)
+            .then(chaptersData => {
+              console.log('Refetched chapters data after completion:', chaptersData);
+              setChapters(chaptersData || []);
+            })
+            .catch(err => console.error('Failed to refetch chapters data:', err));
+        }
+
         setLoading(false);
         break;
 
@@ -103,7 +122,7 @@ export const CourseProvider = ({ children }) => {
       default:
         console.log('Unknown message type:', message.type);
     }
-  }, []);
+  }, [currentCourseId]);
 
   const scheduleReconnect = useCallback((courseId) => {
     if (reconnectTimeoutRef.current) return;
@@ -126,7 +145,9 @@ export const CourseProvider = ({ children }) => {
     connectWebSocketRef.current = connectWebSocket;
     if (!courseId || wsRef.current?.readyState === WebSocket.OPEN) return;
 
-    const wsUrl = `ws://localhost:8127/ws/${courseId}`;
+    // Use current hostname and port for WebSocket connection
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/api/courses/ws/${courseId}`;
     console.log('Connecting to WebSocket:', wsUrl);
 
     try {
@@ -224,12 +245,9 @@ export const CourseProvider = ({ children }) => {
       setCourse(courseData);
       setChapters(chaptersData || []);
 
-      // If course is still being created, keep loading state
-      if (courseData.status === 'creating') {
-        setLoading(true);
-      } else {
-        setLoading(false);
-      }
+      // Always set loading to false after initial data fetch
+      // The UI will handle 'creating' status appropriately
+      setLoading(false);
     } catch (err) {
       setError(err.message);
       console.error('Failed to fetch course data:', err);
