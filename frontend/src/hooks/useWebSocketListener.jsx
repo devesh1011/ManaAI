@@ -7,7 +7,7 @@ import { useNotification } from '../contexts/NotificationContext'; // Adjusted p
  *                                        It will be called with the parsed message data.
  */
 export const useWebSocketListener = (callback) => {
-  const { addListener, isConnected } = useNotification(); // Get addListener and isConnected from context
+  const { addListener } = useNotification(); // Get addListener from context
 
   useEffect(() => {
     if (!callback || typeof callback !== 'function') {
