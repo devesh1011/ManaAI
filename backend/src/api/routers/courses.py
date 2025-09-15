@@ -84,7 +84,7 @@ async def create_course_request(
         return CourseInfo(
             course_id=int(course.id),
             total_time_hours=course_request.time_hours,
-            status=str(course.status),  # Convert enum to string
+            status=course.status.value,  # Use enum value instead of str()
             completed_chapter_count=0,
         )
 
@@ -123,7 +123,7 @@ async def get_course_by_id(
         description=str(course.description),
         chapter_count=(
             int(course.chapter_count)
-            if course.chapter_count and str(course.status) != "finished"
+            if course.chapter_count and course.status.value != "finished"
             else chapters_crud.get_chapter_count_by_course(db, course.id)
         ),
         image_url=str(course.image_url) if course.image_url else None,
@@ -253,12 +253,13 @@ async def update_course_details(
     return CourseInfo(
         course_id=int(updated_course.id),
         total_time_hours=int(updated_course.total_time_hours),
-        status=str(updated_course.status),
+        status=updated_course.status.value,
         title=str(updated_course.title),
         description=str(updated_course.description),
         chapter_count=(
             int(updated_course.chapter_count)
-            if updated_course.chapter_count and str(updated_course.status) != "finished"
+            if updated_course.chapter_count
+            and updated_course.status.value != "finished"
             else chapters_crud.get_chapter_count_by_course(db, course_id)
         ),
         image_url=str(updated_course.image_url) if updated_course.image_url else None,
@@ -442,7 +443,15 @@ async def course_websocket(
     Clients connect to receive updates about course creation progress,
     chapter creation, and question generation.
     """
-    await websocket.accept()
+    logger.info(f"WebSocket connection attempt for course {course_id}")
+    try:
+        await websocket.accept()
+        logger.info(f"WebSocket connection accepted for course {course_id}")
+    except Exception as e:
+        logger.error(
+            f"Failed to accept WebSocket connection for course {course_id}: {e}"
+        )
+        return
 
     # Wait for authentication message
     try:
