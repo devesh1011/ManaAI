@@ -1,46 +1,44 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { Buffer } from 'buffer';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { Buffer } from "buffer";
 //import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-      react(),
-      tailwindcss()//,
-     // visualizer({
-     //   template: 'treemap', // or sunburst
-     //   open: true,
-     //   gzipSize: true,
-     //   brotliSize: true,
-     //   filename: 'stats.html', // analysis file
-     // }),
+    react(),
+    tailwindcss(), //,
+    // visualizer({
+    //   template: 'treemap', // or sunburst
+    //   open: true,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    //   filename: 'stats.html', // analysis file
+    // }),
   ],
   server: {
     port: 3000,
     proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:8127',
+      "/api": {
+        target: "http://127.0.0.1:8127",
         changeOrigin: true,
-        
+
         ws: true,
 
-
+        // eslint-disable-next-line no-unused-vars
         configure: (proxy, options) => {
-
-            
-          proxy.on('open', (proxySocket) => {
-            console.log('[WS Proxy] Connection opened');
+          proxy.on("open", (proxySocket) => {
+            // eslint-disable-line no-unused-vars
+            console.log("[WS Proxy] Connection opened");
           });
 
-          proxy.on('close', (res, socket, head) => {
-            console.log('[WS Proxy] Connection closed');
+          proxy.on("close", (res, socket, head) => {
+            // eslint-disable-line no-unused-vars
+            console.log("[WS Proxy] Connection closed");
           });
 
-
-
-          proxy.on('proxyReq', (proxyReq, req) => {
+          proxy.on("proxyReq", (proxyReq, req) => {
             console.log(`[Proxy] Redirecting: ${req.method} ${req.url}`);
           });
 
@@ -67,11 +65,13 @@ export default defineConfig({
           });
           */
 
-          proxy.on('error', (err, req, res) => {
-            console.error(`[Proxy] Error on ${req.method} ${req.url}: ${err.message}`);
+          proxy.on("error", (err, req, res) => {
+            console.error(
+              `[Proxy] Error on ${req.method} ${req.url}: ${err.message}`
+            );
             if (res && !res.headersSent) {
-              res.writeHead(500, { 'Content-Type': 'text/plain' });
-              res.end('Proxy error: ' + err.message);
+              res.writeHead(500, { "Content-Type": "text/plain" });
+              res.end("Proxy error: " + err.message);
             } else if (res) {
               res.end();
             }
@@ -102,5 +102,5 @@ export default defineConfig({
         //},
       },
     },*/
-  }
-})
+  },
+});

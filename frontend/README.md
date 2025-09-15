@@ -1,9 +1,9 @@
 # Nexora AI - Frontend
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/M4RKUS28/Nexora/blob/main/frontend/public/logo_white.png?raw=true">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/M4RKUS28/Nexora/blob/main/doc/logo_black.png?raw=true">
-  <img alt="Nexora AI Logo" src="https://github.com/M4RKUS28/Nexora/blob/main/frontend/public/logo_white.png?raw=true">
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/M4RKUS28/Mana/blob/main/frontend/public/own-logo.png?raw=true">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/M4RKUS28/Mana/blob/main/frontend/public/own-logo.png?raw=true">
+  <img alt="Mana AI Logo" src="https://github.com/M4RKUS28/Mana/blob/main/frontend/public/own-logo.png?raw=true">
 </picture>
 
 Welcome to the frontend of **Nexora AI**! This is a modern, responsive, and feature-rich user interface for our personalized learning platform, built with React and Vite.
@@ -36,12 +36,14 @@ Follow these instructions to set up and run the frontend application on your loc
 ### Installation & Setup
 
 1.  **Clone the repository:**
+
     ```bash
     git clone https://github.com/M4RKUS28/Nexora.git
     cd Nexora/frontend
     ```
 
 2.  **Install dependencies:**
+
     ```bash
     npm install
     ```
