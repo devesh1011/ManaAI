@@ -1,14 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = '/api';
-
+const API_URL = "/api";
 
 // --- Instanz mit Cookies (für Auth) ---
 export const apiWithCookies = axios.create({
   baseURL: API_URL,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -17,12 +16,12 @@ let isRefreshing = false;
 let failedQueue = [];
 
 const processQueue = (error) => {
-  failedQueue.forEach(p => (error ? p.reject(error) : p.resolve()));
+  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve()));
   failedQueue = [];
 };
 
 apiWithCookies.interceptors.response.use(
-  response => {
+  (response) => {
     // Return the response as-is, preserving the responseType
     return response;
   },
@@ -39,10 +38,6 @@ apiWithCookies.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         }).then(() => {
-          // Preserve the original responseType when retrying
-          if (originalRequest.responseType) {
-            originalRequest.responseType = originalRequest.responseType;
-          }
           return apiWithCookies(originalRequest);
         });
       }
@@ -51,18 +46,16 @@ apiWithCookies.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axios.post('/api/auth/refresh', null, { withCredentials: true });
+        await axios.post("/api/auth/refresh", null, { withCredentials: true });
         processQueue(null);
-        // Preserve the original responseType when retrying
-        if (originalRequest.responseType) {
-          originalRequest.responseType = originalRequest.responseType;
-        }
         return apiWithCookies(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        if (typeof window !== 'undefined' && 
-            window.location.pathname !== '/auth/login') {
-          window.location.href = '/auth/login';
+        if (
+          typeof window !== "undefined" &&
+          window.location.pathname !== "/auth/login"
+        ) {
+          window.location.href = "/auth/login";
         }
         return Promise.reject(refreshError);
       } finally {
@@ -77,8 +70,8 @@ apiWithCookies.interceptors.response.use(
 // --- Instanz ohne Cookies (public/endpoints) ---
 export const apiWithoutCookies = axios.create({
   baseURL: API_URL,
-  withCredentials: false,          // Keine Cookies
+  withCredentials: false, // Keine Cookies
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
