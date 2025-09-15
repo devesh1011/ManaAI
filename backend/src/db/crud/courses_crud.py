@@ -5,7 +5,7 @@ from typing import List
 from ..models.db_course import Course, Chapter
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import select, func as sql_func
-from ...api.schemas.course import CourseInfo
+from ...api.schemas.course import CourseInfo, CourseStatus as APICourseStatus
 
 
 ############### COURSES
@@ -184,7 +184,7 @@ def get_courses_infos(
         course_info = CourseInfo(
             course_id=course_id,
             total_time_hours=total_time_hours,
-            status=str(status),  # Convert enum to string
+            status=APICourseStatus(status.value),  # Convert database enum to API enum
             title=title,
             description=description,
             chapter_count=chapter_count,
